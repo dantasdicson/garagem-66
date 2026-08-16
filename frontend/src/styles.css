@@ -335,6 +335,7 @@ tbody tr:hover { background: #f7f8f9; }
 .status-aberta, .status-aguardando_orcamento, .status-aguardando_aprovacao,
 .status-em_execucao, .status-aguardando_pecas, .status-concluida,
 .status-aprovado { color: #343b42; background: transparent; }
+.status-aprovado { color: #176b36; border-color: #2d8a4e; background: #e9f7ed; }
 .status-concluida_nao_aprovada, .status-recusado { color: var(--g66-accent-dark); background: transparent; }
 
 .budget-summary div, .budget-editor form, .decision-panel {
