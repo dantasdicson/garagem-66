@@ -117,3 +117,241 @@ tbody tr:last-child td { border-bottom: 0; }
   .budget-detail-heading, .decision-panel { align-items: stretch; flex-direction: column; }
   .decision-panel > div:last-child { flex-direction: column; }
 }
+
+/* Identidade visual Garagem 66: painel técnico, plano e funcional. */
+:root {
+  --g66-ink: #171a17;
+  --g66-panel: #242a25;
+  --g66-paper: #f1efe8;
+  --g66-white: #fffef9;
+  --g66-line: #b9b8b0;
+  --g66-accent: #ed5a24;
+  --g66-accent-dark: #b83b14;
+  color: var(--g66-ink);
+  background: var(--g66-paper);
+  font-family: "Arial Narrow", "Roboto Condensed", Arial, sans-serif;
+}
+
+body {
+  background-color: var(--g66-paper);
+  background-image: linear-gradient(#d5d3cb55 1px, transparent 1px);
+  background-size: 100% 32px;
+}
+
+button, input, select, textarea { border-radius: 0; }
+
+input, select, textarea {
+  border: 1px solid #8d918c;
+  border-left: 4px solid var(--g66-panel);
+  padding: 11px 12px;
+  background: var(--g66-white);
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--g66-accent);
+  box-shadow: none;
+}
+
+.auth-page {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--g66-ink);
+}
+
+.auth-page::before {
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  opacity: .16;
+  background: repeating-linear-gradient(135deg, transparent 0 34px, #fff 34px 36px);
+}
+
+.auth-page::after {
+  position: fixed;
+  z-index: -1;
+  right: 0;
+  bottom: 8vh;
+  width: min(48vw, 700px);
+  height: 18px;
+  content: "";
+  background: repeating-linear-gradient(135deg, var(--g66-accent) 0 18px, #111 18px 36px);
+}
+
+.auth-card {
+  position: relative;
+  width: min(100%, 460px);
+  padding: 42px;
+  border: 2px solid var(--g66-ink);
+  border-top: 10px solid var(--g66-accent);
+  border-radius: 0;
+  background: var(--g66-white);
+  box-shadow: 12px 12px 0 #0008;
+}
+
+.auth-card h1, .page-section h1 {
+  font-weight: 900;
+  letter-spacing: -.035em;
+  text-transform: uppercase;
+}
+
+.brand-mark {
+  width: 42px;
+  height: 34px;
+  border: 2px solid currentColor;
+  border-radius: 0;
+  background: var(--g66-accent);
+  color: #fff;
+  transform: skew(-7deg);
+}
+
+.brand-dark { color: var(--g66-ink); }
+.eyebrow { color: var(--g66-accent-dark); letter-spacing: .18em; }
+
+.demo-access {
+  border: 1px dashed #8f938d;
+  border-radius: 0;
+  background: #eeece4;
+}
+
+.button {
+  position: relative;
+  border: 1px solid var(--g66-ink);
+  border-radius: 0;
+  padding: 11px 16px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.button:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--g66-ink); }
+.button-primary { color: #fff; background: var(--g66-accent); }
+.button-secondary { color: #fff; background: var(--g66-panel); }
+.button-danger { background: #a52d20; }
+.button-link { border-color: transparent; color: var(--g66-ink); background: transparent; }
+
+.app-shell { grid-template-columns: 240px minmax(0, 1fr); }
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  border-right: 8px solid var(--g66-accent);
+  background: var(--g66-ink);
+}
+
+.sidebar nav { border-top: 1px solid #ffffff30; }
+
+.sidebar nav a {
+  position: relative;
+  border-bottom: 1px solid #ffffff24;
+  border-radius: 0;
+  padding: 13px 10px;
+  color: #d1d4d0;
+  font-size: .82rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.sidebar nav a:hover, .sidebar nav a.active {
+  color: #fff;
+  background: #ffffff0c;
+}
+
+.sidebar nav a.active::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -22px;
+  width: 7px;
+  content: "";
+  background: var(--g66-accent);
+}
+
+.button-ghost { border-color: #ffffff55; border-radius: 0; background: transparent; }
+
+.topbar {
+  min-height: 72px;
+  border-bottom: 2px solid var(--g66-ink);
+  background: var(--g66-white);
+}
+
+.topbar::before {
+  align-self: center;
+  margin-right: auto;
+  color: #767b76;
+  content: "PAINEL DE OPERAÇÕES  /  G66";
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .15em;
+}
+
+.page-section { padding-top: 5vh; }
+.page-heading { border-bottom: 4px solid var(--g66-ink); padding-bottom: 18px; }
+.lead { color: #525752; }
+
+.metric-card, .empty-state, .table-card, .form-card, .budget-detail {
+  border: 1px solid var(--g66-line);
+  border-top: 4px solid var(--g66-ink);
+  border-radius: 0;
+  background: var(--g66-white);
+  box-shadow: none;
+}
+
+.metric-card { position: relative; padding-top: 30px; }
+.metric-card::before { position: absolute; top: 0; left: 0; width: 42px; height: 5px; content: ""; background: var(--g66-accent); }
+.metric-card strong { font-size: 1.5rem; }
+
+th {
+  border-bottom: 2px solid var(--g66-ink);
+  background: #e4e2da;
+  color: var(--g66-ink);
+  font-size: .7rem;
+  letter-spacing: .12em;
+}
+
+tbody tr:hover { background: #f2efe6; }
+.selected-row { background: #eee9dc; box-shadow: inset 5px 0 0 var(--g66-accent); }
+
+.table-action {
+  border: 1px solid #777c77;
+  border-radius: 0;
+  background: transparent;
+  color: var(--g66-ink);
+  font-size: .76rem;
+  text-transform: uppercase;
+}
+
+.table-action:hover:not(:disabled) { border-color: var(--g66-accent); color: var(--g66-accent-dark); }
+
+.form-card { border-top-color: var(--g66-accent); }
+.form-card h2, .budget-detail h2 { text-transform: uppercase; }
+
+.status-badge {
+  border: 1px solid currentColor;
+  border-radius: 0;
+  padding: 5px 7px;
+  background: transparent;
+  font-size: .68rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.budget-summary div, .budget-editor form, .decision-panel {
+  border: 1px solid var(--g66-line);
+  border-radius: 0;
+  background: #ebe9e1;
+}
+
+.budget-total { color: var(--g66-accent-dark); font-family: Consolas, monospace; }
+.budget-note { border-left-color: var(--g66-accent); background: #f4eee7; }
+
+@media (max-width: 760px) {
+  .app-shell { grid-template-columns: 1fr; }
+  .sidebar { position: static; height: auto; border-right: 0; border-bottom: 6px solid var(--g66-accent); }
+  .sidebar nav { border-top: 0; }
+  .sidebar nav a.active::before { display: none; }
+  .topbar::before { display: none; }
+  .auth-card { box-shadow: 7px 7px 0 #0008; }
+}
