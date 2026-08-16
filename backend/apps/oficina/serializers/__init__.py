@@ -11,11 +11,11 @@ from .item_orcamento_servico import ItemOrcamentoServicoSerializer
 from .motocicleta import MotocicletaSerializer
 from .modelo_motocicleta import ModeloMotocicletaSerializer
 from .orcamento import OrcamentoSerializer
-from .ordem_servico import AcaoStatusOrdemSerializer, OrdemServicoSerializer, ReabrirOrdemSerializer
+from .ordem_servico import AbrirAtendimentoSerializer, AcaoStatusOrdemSerializer, OrdemServicoSerializer, ReabrirOrdemSerializer
 
 __all__ = [
     "AcessorioSerializer", "AvariaSerializer", "ClienteSerializer", "EntradaVeiculoSerializer",
     "FotoSerializer", "HistoricoStatusOrdemSerializer", "ItemChecklistEntradaSerializer", "ItemOrcamentoPecaSerializer",
     "ItemOrcamentoServicoSerializer", "ItemServicoSerializer", "ModeloMotocicletaSerializer", "MotocicletaSerializer", "OrcamentoSerializer",
-    "AcaoStatusOrdemSerializer", "OrdemServicoSerializer", "ReabrirOrdemSerializer",
+    "AbrirAtendimentoSerializer", "AcaoStatusOrdemSerializer", "OrdemServicoSerializer", "ReabrirOrdemSerializer",
 ]

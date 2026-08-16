@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 import { apiRequest } from "../api/client";
 import { useAuth } from "../contexts/AuthContext";
@@ -11,6 +11,7 @@ const formularioVazio = {
 
 export default function ClientesPage() {
   const { usuario } = useAuth();
+  const navigate = useNavigate();
   const [clientes, setClientes] = useState([]);
   const [form, setForm] = useState(formularioVazio);
   const [editandoId, setEditandoId] = useState(null);
@@ -55,9 +56,11 @@ export default function ClientesPage() {
     setSalvando(true);
     try {
       const caminho = editandoId ? `/oficina/clientes/${editandoId}/` : "/oficina/clientes/";
-      await apiRequest(caminho, { method: editandoId ? "PATCH" : "POST", body: JSON.stringify(form) });
+      const clienteSalvo = await apiRequest(caminho, { method: editandoId ? "PATCH" : "POST", body: JSON.stringify(form) });
+      const novoCadastro = !editandoId;
       cancelar();
       await carregar();
+      if (novoCadastro) navigate(`/ordens?cliente=${clienteSalvo.id}&nova_moto=1`);
     } catch (error) {
       setErro(error.message);
     } finally {
@@ -98,4 +101,3 @@ export default function ClientesPage() {
     </section>
   );
 }
-

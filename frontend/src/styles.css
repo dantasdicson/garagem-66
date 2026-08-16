@@ -323,6 +323,9 @@ tbody tr:hover { background: #f7f8f9; }
 .generated-field { display: grid; gap: 4px; margin: 8px 0; padding: 11px 12px; border-left: 4px solid var(--g66-accent); background: #f0f2f4; }
 .generated-field span { color: #666c66; font-size: .75rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .generated-field strong { font-family: Consolas, monospace; font-size: .86rem; }
+.option-toggle { display: flex; gap: 9px; align-items: center; padding: 10px 0; }
+.option-toggle input { width: auto; accent-color: var(--g66-accent); }
+.inline-vehicle-form { display: grid; gap: 8px; padding: 16px; border: 1px solid var(--g66-line); border-left: 4px solid var(--g66-accent); background: #f6f7f8; }
 
 .status-badge {
   border: 1px solid currentColor;
