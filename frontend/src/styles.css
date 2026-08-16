@@ -62,6 +62,13 @@ td small { color: #758078; margin-top: 4px; }
 tbody tr:last-child td { border-bottom: 0; }
 .empty-cell { text-align: center; color: #738078; padding: 42px; }
 .table-action { border: 0; background: #edf4ef; color: #24583a; border-radius: 8px; padding: 7px 10px; cursor: pointer; font-weight: 750; }
+.table-action:disabled { cursor: wait; opacity: .6; }
+.table-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.status-badge { display: inline-block; border-radius: 999px; padding: 6px 9px; background: #edf1ee; color: #405047; font-size: .76rem; font-weight: 800; white-space: nowrap; }
+.status-em_execucao { background: #e5f2ff; color: #20547d; }
+.status-aguardando_aprovacao, .status-aguardando_orcamento, .status-aguardando_pecas { background: #fff4cf; color: #795b00; }
+.status-concluida { background: #e3f6e9; color: #23613a; }
+.status-concluida_nao_aprovada { background: #ffebe8; color: #8c3027; }
 .form-card { padding: 24px; display: grid; gap: 8px; }
 .form-card h2 { margin: 5px 0 14px; }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }

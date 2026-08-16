@@ -8,6 +8,7 @@ import LoginPage from "./pages/LoginPage";
 import ModuloPage from "./pages/ModuloPage";
 import ClientesPage from "./pages/ClientesPage";
 import MotocicletasPage from "./pages/MotocicletasPage";
+import OrdensServicoPage from "./pages/OrdensServicoPage";
 
 export default function App() {
   return (
@@ -20,6 +21,8 @@ export default function App() {
           <Route path="/clientes" element={<ClientesPage />} />
           <Route path="/motocicletas" element={<MotocicletasPage />} />
           <Route path="/minhas-motos" element={<MotocicletasPage />} />
+          <Route path="/ordens" element={<OrdensServicoPage />} />
+          <Route path="/minhas-ordens" element={<OrdensServicoPage />} />
           <Route path="/:modulo" element={<ModuloPage />} />
         </Route>
       </Route>
