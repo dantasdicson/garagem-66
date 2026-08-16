@@ -125,8 +125,8 @@ tbody tr:last-child td { border-bottom: 0; }
   --g66-paper: #f1efe8;
   --g66-white: #fffef9;
   --g66-line: #b9b8b0;
-  --g66-accent: #ed5a24;
-  --g66-accent-dark: #b83b14;
+  --g66-accent: #c7ee32;
+  --g66-accent-dark: #526d00;
   color: var(--g66-ink);
   background: var(--g66-paper);
   font-family: "Arial Narrow", "Roboto Condensed", Arial, sans-serif;
@@ -202,7 +202,7 @@ input:focus, select:focus, textarea:focus {
   border: 2px solid currentColor;
   border-radius: 0;
   background: var(--g66-accent);
-  color: #fff;
+  color: var(--g66-ink);
   transform: skew(-7deg);
 }
 
@@ -225,7 +225,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .button:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 3px 3px 0 var(--g66-ink); }
-.button-primary { color: #fff; background: var(--g66-accent); }
+.button-primary { color: var(--g66-ink); background: var(--g66-accent); }
 .button-secondary { color: #fff; background: var(--g66-panel); }
 .button-danger { background: #a52d20; }
 .button-link { border-color: transparent; color: var(--g66-ink); background: transparent; }
@@ -255,7 +255,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .sidebar nav a:hover, .sidebar nav a.active {
-  color: #fff;
+  color: var(--g66-ink);
   background: #ffffff0c;
 }
 
