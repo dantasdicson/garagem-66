@@ -304,6 +304,8 @@ th {
 
 tbody tr:hover { background: #f7f8f9; }
 .selected-row { background: #fff1f1; box-shadow: inset 5px 0 0 var(--g66-accent); }
+.selected-row.selected-aprovado { background: #edf8f0; box-shadow: inset 5px 0 0 #2d8a4e; }
+.selected-row.selected-recusado { background: #fff1f1; box-shadow: inset 5px 0 0 var(--g66-accent); }
 
 .table-action {
   border: 1px solid #777c77;
@@ -345,6 +347,7 @@ tbody tr:hover { background: #f7f8f9; }
 }
 
 .budget-total { color: var(--g66-accent-dark); font-family: Consolas, monospace; }
+.budget-detail-aprovado .budget-total { color: #176b36; }
 .budget-note { border-left-color: var(--g66-accent); background: #fff2f2; }
 
 @media (max-width: 760px) {

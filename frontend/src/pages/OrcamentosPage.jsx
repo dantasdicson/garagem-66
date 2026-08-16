@@ -187,12 +187,13 @@ export default function OrcamentosPage() {
             <div className="table-scroll"><table><thead><tr><th>Ordem</th><th>Status</th><th>Validade</th><th>Total</th><th><span className="sr-only">Ações</span></th></tr></thead>
               <tbody>{orcamentos.length ? orcamentos.map((orcamento) => {
                 const ordem = ordensPorId.get(orcamento.ordem_servico);
-                return <tr key={orcamento.id} className={orcamento.id === selecionadoId ? "selected-row" : ""}><td><strong>{ordem?.numero || `OS #${orcamento.ordem_servico}`}</strong><small>{ordem?.descricao_problema}</small></td>
+                const classeSelecionada = orcamento.id === selecionadoId ? `selected-row selected-${orcamento.status.toLowerCase()}` : "";
+                return <tr key={orcamento.id} className={classeSelecionada}><td><strong>{ordem?.numero || `OS #${orcamento.ordem_servico}`}</strong><small>{ordem?.descricao_problema}</small></td>
                   <td><span className={`status-badge status-${orcamento.status.toLowerCase()}`}>{nomesStatus[orcamento.status]}</span></td><td>{dataBrasileira(orcamento.validade)}</td><td><strong>{moeda(orcamento.valor_total)}</strong></td>
                   <td><button className="table-action" type="button" onClick={() => setSelecionadoId(orcamento.id)}>Ver detalhes</button></td></tr>;
               }) : <tr><td colSpan="5" className="empty-cell">Nenhum orçamento encontrado.</td></tr>}</tbody></table></div>
           )}</div>
-          {selecionado ? <article className="budget-detail" aria-labelledby="orcamento-detalhes">
+          {selecionado ? <article className={`budget-detail budget-detail-${selecionado.status.toLowerCase()}`} aria-labelledby="orcamento-detalhes">
             <div className="budget-detail-heading"><div><p className="eyebrow">Detalhamento</p><h2 id="orcamento-detalhes">{ordensPorId.get(selecionado.ordem_servico)?.numero || `Orçamento #${selecionado.id}`}</h2></div>
               <strong className="budget-total">{moeda(selecionado.valor_total)}</strong></div>
             <dl className="budget-summary"><div><dt>Mão de obra</dt><dd>{moeda(selecionado.valor_mao_obra)}</dd></div><div><dt>Peças</dt><dd>{moeda(selecionado.valor_pecas)}</dd></div><div><dt>Validade</dt><dd>{dataBrasileira(selecionado.validade)}</dd></div></dl>
