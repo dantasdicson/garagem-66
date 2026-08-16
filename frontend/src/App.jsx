@@ -9,6 +9,7 @@ import ModuloPage from "./pages/ModuloPage";
 import ClientesPage from "./pages/ClientesPage";
 import MotocicletasPage from "./pages/MotocicletasPage";
 import OrdensServicoPage from "./pages/OrdensServicoPage";
+import OrcamentosPage from "./pages/OrcamentosPage";
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
           <Route path="/minhas-motos" element={<MotocicletasPage />} />
           <Route path="/ordens" element={<OrdensServicoPage />} />
           <Route path="/minhas-ordens" element={<OrdensServicoPage />} />
+          <Route path="/orcamentos" element={<OrcamentosPage />} />
           <Route path="/:modulo" element={<ModuloPage />} />
         </Route>
       </Route>

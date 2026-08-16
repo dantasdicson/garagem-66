@@ -7,6 +7,8 @@ from ..services import adicionar_peca_prevista
 
 class ItemOrcamentoPecaSerializer(serializers.ModelSerializer):
     valor_total = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
+    peca_nome = serializers.CharField(source="peca.nome", read_only=True)
+    peca_codigo = serializers.CharField(source="peca.codigo", read_only=True)
 
     class Meta:
         model = ItemOrcamentoPeca
