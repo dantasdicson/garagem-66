@@ -1,5 +1,6 @@
 databases:
   - name: garagem66-db
+    plan: free
     databaseName: garagem66
     user: garagem66
 
@@ -7,6 +8,7 @@ services:
   - type: web
     name: garagem66-api
     runtime: python
+    plan: free
     rootDir: backend
     buildCommand: pip install -r ../requirements/base.txt && python manage.py collectstatic --noinput
     startCommand: python manage.py migrate && python manage.py criar_dados_demo && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
