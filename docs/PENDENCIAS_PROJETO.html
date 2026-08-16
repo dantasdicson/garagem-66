@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Garagem 66 — Pendências do Projeto</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --surface: #ffffff;
+      --text: #20262d;
+      --muted: #66717d;
+      --line: #dce2e8;
+      --brand: #b52525;
+      --brand-dark: #751919;
+      --ok: #267348;
+      --warning: #a65d00;
+      --pending: #7a3faf;
+      --shadow: 0 10px 30px rgba(24, 31, 39, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--bg);
+      font: 16px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    header {
+      padding: 48px 24px;
+      color: #fff;
+      background: linear-gradient(135deg, #191d22 0%, var(--brand-dark) 100%);
+    }
+
+    header div, main, footer { max-width: 1120px; margin: 0 auto; }
+    h1, h2, h3 { line-height: 1.2; }
+    h1 { margin: 0 0 8px; font-size: clamp(2rem, 5vw, 3.25rem); }
+    h2 { margin-top: 0; font-size: 1.55rem; }
+    h3 { margin-bottom: 8px; font-size: 1.05rem; }
+    header p { margin: 4px 0; color: #f4dede; }
+
+    main { padding: 28px 18px 56px; }
+    section {
+      margin-bottom: 22px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .card { padding: 18px; border-radius: 12px; background: #f7f9fb; border: 1px solid var(--line); }
+    .card strong { display: block; font-size: 1.4rem; }
+    .card span, .muted { color: var(--muted); }
+    .status { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: .82rem; font-weight: 700; }
+    .status.ok { color: var(--ok); background: #e5f5ec; }
+    .status.partial { color: var(--warning); background: #fff1da; }
+    .status.todo { color: var(--pending); background: #f1e8fa; }
+    .priority { font-weight: 700; color: var(--brand); }
+
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { color: #fff; background: #303740; }
+    tr:last-child td { border-bottom: 0; }
+    ul, ol { padding-left: 22px; }
+    li + li { margin-top: 6px; }
+    code { padding: 2px 6px; border-radius: 5px; background: #edf0f3; }
+
+    .roadmap { counter-reset: etapa; list-style: none; padding: 0; }
+    .roadmap li { position: relative; margin: 0 0 14px; padding: 16px 16px 16px 58px; border-left: 4px solid var(--brand); background: #f8f9fa; }
+    .roadmap li::before {
+      counter-increment: etapa;
+      content: counter(etapa);
+      position: absolute;
+      left: 14px;
+      top: 14px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--brand);
+      text-align: center;
+      line-height: 28px;
+      font-weight: 700;
+    }
+
+    .note { border-left: 5px solid var(--warning); background: #fff9ee; }
+    footer { padding: 0 18px 36px; color: var(--muted); text-align: center; }
+
+    @media (max-width: 850px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      table { display: block; overflow-x: auto; }
+    }
+
+    @media (max-width: 520px) {
+      header { padding: 34px 18px; }
+      section { padding: 18px; }
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      header { padding: 24px; }
+      main { max-width: none; padding: 18px 0; }
+      section { box-shadow: none; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Garagem 66</h1>
+      <p>Relatório de alinhamento e pendências do projeto</p>
+      <p>Baseado no Documento de Visão <strong>final1408_VERCEL_RENDER</strong></p>
+      <p>Atualizado em 16 de agosto de 2026</p>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <h2>Resumo executivo</h2>
+      <p>A arquitetura do projeto está alinhada ao documento de visão: React na interface, Django e Django REST Framework no backend, PostgreSQL no banco, Git no versionamento, Vercel no frontend e Render no backend e banco.</p>
+      <p>A fundação técnica está pronta, mas o sistema ainda não está completo para demonstração. O backend possui modelos, migrations, API CRUD, autenticação JWT e permissões iniciais. O frontend possui apenas a estrutura Vite/React e ainda não contém as telas do sistema.</p>
+
+      <div class="grid">
+        <div class="card"><strong>Alinhada</strong><span>Arquitetura tecnológica</span></div>
+        <div class="card"><strong>Parcial</strong><span>Regras e permissões</span></div>
+        <div class="card"><strong>Inicial</strong><span>Interface React</span></div>
+        <div class="card"><strong>Pendente</strong><span>Deploy e entrega final</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>O que já foi construído</h2>
+      <table>
+        <thead><tr><th>Componente</th><th>Estado</th><th>Conteúdo atual</th></tr></thead>
+        <tbody>
+          <tr><td>Estrutura do backend</td><td><span class="status ok">Concluído</span></td><td>Configurações separadas e módulos <code>usuarios</code>, <code>oficina</code> e <code>estoque</code>.</td></tr>
+          <tr><td>Modelagem inicial</td><td><span class="status partial">Parcial</span></td><td>Entidades principais e relacionamentos criados; campos e fluxos do documento ainda precisam ser incorporados.</td></tr>
+          <tr><td>Banco e migrations</td><td><span class="status partial">Parcial</span></td><td>Migrations geradas e testadas com SQLite temporário; falta validar com PostgreSQL.</td></tr>
+          <tr><td>API REST</td><td><span class="status partial">Parcial</span></td><td>CRUD básico por entidade, serializers e viewsets.</td></tr>
+          <tr><td>Autenticação</td><td><span class="status partial">Parcial</span></td><td>JWT e perfis de usuário; falta login por CPF e primeiro acesso do cliente.</td></tr>
+          <tr><td>Frontend</td><td><span class="status partial">Parcial</span></td><td>Autenticação, perfis, clientes e motocicletas implementados; os demais domínios ainda precisam de telas.</td></tr>
+          <tr><td>Git</td><td><span class="status partial">Parcial</span></td><td>Repositório iniciado, ainda sem commit inicial ou repositório remoto.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Avanço mais recente — adequação da modelagem</h2>
+      <p><span class="status ok">Concluído</span> Estrutura de dados atualizada conforme o documento de visão.</p>
+      <ul>
+        <li>Cliente agora possui data de nascimento e endereço.</li>
+        <li>Usuário possui indicador de troca obrigatória de senha.</li>
+        <li>Entrada possui motivo e checklist estruturado por item.</li>
+        <li>Ordem de serviço possui tipo de manutenção, mecânico, conclusão e todos os status previstos.</li>
+        <li>Orçamento possui validade, status e registro da decisão.</li>
+        <li>Peça possui estoque mínimo e status calculado.</li>
+        <li>Requisição utiliza os estados Pendente, Aprovada e Recusada.</li>
+        <li>O estoque foi mantido simples: saldo na peça e utilização registrada por item da OS.</li>
+        <li>A inclusão de um item de peça agora baixa o estoque; estoque insuficiente bloqueia a operação e a exclusão restaura o saldo.</li>
+        <li>Três testes automatizados cobrem baixa, saldo insuficiente e devolução ao excluir.</li>
+        <li>O mecânico atribuído à OS pode solicitar uma peça; somente o administrador pode aprovar ou recusar.</li>
+        <li>Sete testes automatizados cobrem atualmente estoque e requisições.</li>
+        <li>Orçamentos podem ser emitidos pela equipe e aprovados ou recusados pelo cliente proprietário.</li>
+        <li>A decisão do orçamento atualiza automaticamente a ordem de serviço.</li>
+        <li>Doze testes automatizados cobrem atualmente orçamento, estoque e requisições.</li>
+        <li>Serviços e peças previstos no orçamento foram separados dos itens efetivamente executados e utilizados.</li>
+        <li>Os totais do orçamento são recalculados automaticamente, sem baixar o estoque durante a cotação.</li>
+        <li>Quinze testes automatizados cobrem atualmente orçamento, estoque e requisições.</li>
+        <li>O cadastro do cliente cria automaticamente o usuário, usando o CPF como login.</li>
+        <li>A senha inicial é formada pela data de nascimento e precisa ser alterada no primeiro acesso.</li>
+        <li>Dezenove testes automatizados cobrem atualmente autenticação, orçamento, estoque e requisições.</li>
+        <li>A entrada da motocicleta agora registra checklist completo, avarias e acessórios em uma única transação.</li>
+        <li>O recebimento exige todos os nove itens do checklist, rejeita repetições e desfaz toda a operação em caso de erro.</li>
+        <li>Uma entrada válida atualiza automaticamente a ordem para Aguardando orçamento.</li>
+        <li>Vinte e quatro testes automatizados cobrem atualmente autenticação, entrada, orçamento, estoque e requisições.</li>
+        <li>Serviços executados e peças utilizadas agora exigem ordem em execução e orçamento aprovado.</li>
+        <li>O mecânico somente pode registrar e consultar itens das ordens atribuídas a ele.</li>
+        <li>Vinte e sete testes automatizados cobrem atualmente autenticação, entrada, execução, orçamento, estoque e requisições.</li>
+        <li>Cada mudança de status da ordem registra status anterior, novo status, responsável, data e observação.</li>
+        <li>O histórico é imutável pela API, pode ser filtrado por ordem e está integrado aos fluxos de entrada e orçamento.</li>
+        <li>Vinte e nove testes automatizados cobrem atualmente autenticação, entrada, execução, histórico, orçamento, estoque e requisições.</li>
+        <li>O fluxo de status agora possui uma matriz explícita de transições permitidas.</li>
+        <li>Equipe autorizada pode pausar por peças, retomar e concluir; o mecânico atua somente na ordem atribuída.</li>
+        <li>Somente o administrador reabre uma ordem concluída, obrigatoriamente com justificativa.</li>
+        <li>Trinta e seis testes automatizados cobrem atualmente os fluxos principais do backend.</li>
+        <li>Telefones de clientes agora aceitam máscara ou prefixo +55, são validados e armazenados em formato brasileiro padronizado.</li>
+        <li>Trinta e nove testes automatizados cobrem atualmente os fluxos principais do backend.</li>
+        <li>O cliente autenticado agora consulta exclusivamente seu cadastro, motocicletas, ordens, orçamentos e históricos.</li>
+        <li>A tentativa de acessar diretamente um registro de outro cliente retorna 404 e operações de escrita continuam bloqueadas.</li>
+        <li>Quarenta e cinco testes automatizados cobrem atualmente os fluxos principais do backend.</li>
+        <li>O ambiente de apresentação possui Blueprint do Render, PostgreSQL gerenciado, health check e configuração da Vercel.</li>
+        <li>Quatro contas fictícias e uma OS pronta para aprovação são restauradas automaticamente no backend publicado.</li>
+        <li>Quarenta e seis testes automatizados cobrem atualmente os fluxos principais do backend.</li>
+        <li>Serializers, endpoints, Django Admin e migrations foram atualizados.</li>
+        <li>As migrations foram aplicadas e o Django foi validado sem erros.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Pendências do backend</h2>
+
+      <h3 class="priority">Prioridade alta — Cadastro e autenticação</h3>
+      <ul>
+        <li>Integrar o primeiro acesso e a troca obrigatória de senha no frontend.</li>
+      </ul>
+
+      <h3 class="priority">Prioridade alta — Entrada e checklist</h3>
+      <ul>
+        <li>Definir armazenamento persistente para as fotografias publicadas.</li>
+      </ul>
+
+      <h3 class="priority">Prioridade alta — Ordem de serviço</h3>
+      <ul>
+        <li>Definir se a conclusão exigirá conferência formal do atendente antes da entrega.</li>
+      </ul>
+
+      <h3 class="priority">Prioridade alta — Orçamento</h3>
+      <ul>
+        <li>Integrar no frontend a composição e a visualização dos itens previstos.</li>
+      </ul>
+
+      <h3 class="priority">Prioridade alta — Estoque e requisições</h3>
+      <ul>
+        <li>Integrar as telas do mecânico e do administrador aos endpoints de requisição.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Permissões a adequar</h2>
+      <table>
+        <thead><tr><th>Perfil</th><th>Acesso esperado</th><th>Pendência principal</th></tr></thead>
+        <tbody>
+          <tr><td>Administrador</td><td>Gerenciamento completo.</td><td>Completar fluxos de aprovação, estoque e usuários.</td></tr>
+          <tr><td>Atendente</td><td>Clientes, motos, entrada, abertura de OS e orçamento.</td><td>Restringir alterações administrativas de estoque.</td></tr>
+          <tr><td>Mecânico</td><td>Ordens atribuídas, serviços, peças e requisições.</td><td>Atualmente possui basicamente acesso de leitura.</td></tr>
+          <tr><td>Cliente</td><td>Dados próprios, motos, OS, orçamento e histórico.</td><td><span class="status ok">Backend concluído</span>; falta integrar a área do cliente no frontend.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Pendências do frontend</h2>
+      <ul>
+        <li>Implementar Entrada da Motocicleta e checklist.</li>
+        <li>Implementar Ordens de Serviço.</li>
+        <li>Implementar Orçamentos e decisão do cliente.</li>
+        <li>Implementar Estoque e Requisições.</li>
+        <li>Implementar Histórico.</li>
+        <li>Implementar Área do Cliente.</li>
+        <li>Garantir responsividade em computador, tablet e celular.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Testes e homologação</h2>
+      <ul>
+        <li>Criar testes dos modelos, serializers, serviços, permissões e endpoints.</li>
+        <li>Testar cada perfil de usuário.</li>
+        <li>Testar cadastro de clientes e motocicletas.</li>
+        <li>Testar entrada, checklist e anexos.</li>
+        <li>Testar abertura e transições da ordem de serviço.</li>
+        <li>Testar aprovação e recusa do orçamento.</li>
+        <li>Testar baixa e proteção do estoque.</li>
+        <li>Testar requisição e decisão administrativa.</li>
+        <li>Criar cenários e dados fictícios para apresentação.</li>
+        <li>Realizar teste completo do navegador até o PostgreSQL.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Hospedagem e produção</h2>
+      <table>
+        <thead><tr><th>Destino</th><th>Componente</th><th>Preparação pendente</th></tr></thead>
+        <tbody>
+          <tr><td>Vercel</td><td>React/Vite</td><td>Build do frontend, <code>VITE_API_URL</code>, rotas SPA e diretório raiz <code>frontend/</code>.</td></tr>
+          <tr><td>Render</td><td>Django/DRF</td><td>Gunicorn, WhiteNoise, build, collectstatic, migrations, hosts, CORS e variáveis de produção.</td></tr>
+          <tr><td>Render</td><td>PostgreSQL</td><td>Criar banco gerenciado e fornecer <code>DATABASE_URL</code> ao backend.</td></tr>
+          <tr><td>Armazenamento externo</td><td>Fotografias</td><td>Definir solução persistente; o disco efêmero do serviço não deve ser tratado como armazenamento definitivo.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="note">
+      <h2>Observação de segurança</h2>
+      <p>O documento acadêmico define a data de nascimento como senha inicial. Essa senha é previsível. Caso a regra seja mantida para aderência ao trabalho, a troca no primeiro acesso deverá ser obrigatória. Nenhuma senha, token, chave ou arquivo <code>.env</code> real deverá ser enviado ao Git ou incluído no ZIP.</p>
+    </section>
+
+    <section>
+      <h2>Roteiro recomendado</h2>
+      <ol class="roadmap">
+        <li><strong>Adequar a modelagem.</strong> Corrigir campos, status e relacionamentos antes de construir telas.</li>
+        <li><strong>Gerar e validar migrations.</strong> Executar toda a estrutura no PostgreSQL local.</li>
+        <li><strong>Implementar serviços de domínio.</strong> Orçamento, OS, estoque, requisições e primeiro acesso.</li>
+        <li><strong>Corrigir API e permissões.</strong> Garantir acesso por perfil e propriedade.</li>
+        <li><strong>Criar testes do backend.</strong> Validar regras e cenários críticos.</li>
+        <li><strong>Construir o frontend.</strong> Seguir os protótipos e integrar com a API.</li>
+        <li><strong>Testar o fluxo completo.</strong> Login, atendimento, aprovação, execução, estoque e histórico.</li>
+        <li><strong>Preparar demonstração.</strong> Criar contas, motocicletas, OS e peças fictícias.</li>
+        <li><strong>Publicar.</strong> Frontend na Vercel; backend e PostgreSQL na Render.</li>
+        <li><strong>Finalizar a entrega.</strong> Atualizar documentação e gerar ZIP sem segredos ou dependências instaladas.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Critérios para considerar o projeto pronto</h2>
+      <ul>
+        <li>Os quatro perfis conseguem entrar e enxergam somente as funções permitidas.</li>
+        <li>Um atendimento completo pode ser realizado do cadastro até a conclusão da OS.</li>
+        <li>O cliente consegue acompanhar sua OS e decidir o orçamento.</li>
+        <li>Peças utilizadas atualizam corretamente o estoque.</li>
+        <li>O histórico permanece vinculado à motocicleta.</li>
+        <li>Fotografias e registros de entrada podem ser consultados posteriormente.</li>
+        <li>O sistema funciona em computador e celular.</li>
+        <li>Frontend, API e PostgreSQL estão publicados e comunicando-se.</li>
+        <li>README e ZIP permitem que outra pessoa prepare o ambiente local.</li>
+        <li>Nenhuma credencial sensível está presente no repositório ou no ZIP.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    Garagem 66 — Sua moto. Seu histórico. Tudo sob controle.
+  </footer>
+</body>
+</html>

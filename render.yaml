@@ -1,0 +1,34 @@
+databases:
+  - name: garagem66-db
+    databaseName: garagem66
+    user: garagem66
+
+services:
+  - type: web
+    name: garagem66-api
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r ../requirements/base.txt && python manage.py collectstatic --noinput
+    startCommand: python manage.py migrate && python manage.py criar_dados_demo && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
+    healthCheckPath: /api/health/
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.5
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings.production
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DJANGO_ALLOWED_HOSTS
+        value: .onrender.com
+      - key: DATABASE_URL
+        fromDatabase:
+          name: garagem66-db
+          property: connectionString
+      - key: DJANGO_CORS_ALLOWED_ORIGINS
+        sync: false
+      - key: DJANGO_CSRF_TRUSTED_ORIGINS
+        sync: false
+      - key: DEMO_PASSWORD
+        value: Garagem66@Demo

@@ -1,0 +1,129 @@
+import os
+from datetime import date, timedelta
+from decimal import Decimal
+
+from django.core.management.base import BaseCommand
+from django.db import transaction
+from django.utils import timezone
+
+from apps.estoque.models import Peca
+from apps.oficina.models import (
+    Cliente,
+    HistoricoStatusOrdem,
+    ItemOrcamentoPeca,
+    ItemOrcamentoServico,
+    Motocicleta,
+    Orcamento,
+    OrdemServico,
+)
+from apps.usuarios.models import Usuario
+
+
+class Command(BaseCommand):
+    help = "Cria ou restaura as contas e os dados fictícios usados na apresentação."
+
+    @transaction.atomic
+    def handle(self, *args, **options):
+        senha = os.environ.get("DEMO_PASSWORD", "Garagem66@Demo")
+        usuarios = {}
+        configuracoes = {
+            "admin.demo": ("Administrador", "Demo", Usuario.Tipo.ADMINISTRADOR),
+            "atendente.demo": ("Atendente", "Demo", Usuario.Tipo.ATENDENTE),
+            "mecanico.demo": ("Mecânico", "Demo", Usuario.Tipo.MECANICO),
+            "52998224725": ("Marina", "Oliveira", Usuario.Tipo.CLIENTE),
+        }
+        for username, (nome, sobrenome, tipo) in configuracoes.items():
+            usuario, _ = Usuario.objects.update_or_create(
+                username=username,
+                defaults={
+                    "email": f"{username.replace('.', '-')}@demo.garagem66.local",
+                    "first_name": nome,
+                    "last_name": sobrenome,
+                    "tipo": tipo,
+                    "is_active": True,
+                    "is_staff": False,
+                    "is_superuser": False,
+                    "deve_alterar_senha": False,
+                },
+            )
+            usuario.set_password(senha)
+            usuario.save(update_fields=("password",))
+            usuarios[tipo] = usuario
+
+        cliente, _ = Cliente.objects.update_or_create(
+            cpf="52998224725",
+            defaults={
+                "usuario": usuarios[Usuario.Tipo.CLIENTE],
+                "nome": "Marina Oliveira",
+                "data_nascimento": date(1990, 2, 1),
+                "email": "52998224725@demo.garagem66.local",
+                "telefone": "(11) 99999-0066",
+                "endereco": "Rua da Motocicleta, 66 - São Paulo/SP",
+            },
+        )
+        motocicleta, _ = Motocicleta.objects.update_or_create(
+            placa="GDM6A66",
+            defaults={
+                "cliente": cliente,
+                "marca": "Honda",
+                "modelo": "CB 500X",
+                "ano": 2024,
+                "chassi": "9C2DEMO6600000001",
+                "cor": "Vermelha",
+            },
+        )
+        peca, _ = Peca.objects.update_or_create(
+            codigo="DEMO-FLT-001",
+            defaults={
+                "nome": "Filtro de óleo",
+                "descricao": "Peça fictícia para demonstração.",
+                "quantidade_estoque": 12,
+                "quantidade_minima": 3,
+                "valor_unitario": Decimal("44.90"),
+            },
+        )
+        ordem, _ = OrdemServico.objects.update_or_create(
+            numero="OS-DEMO-001",
+            defaults={
+                "motocicleta": motocicleta,
+                "cliente": cliente,
+                "mecanico": usuarios[Usuario.Tipo.MECANICO],
+                "tipo_manutencao": OrdemServico.TipoManutencao.PREVENTIVA,
+                "descricao_problema": "Revisão preventiva para apresentação do sistema.",
+                "status": OrdemServico.Status.AGUARDANDO_APROVACAO,
+                "concluida_em": None,
+            },
+        )
+        orcamento, _ = Orcamento.objects.update_or_create(
+            ordem_servico=ordem,
+            defaults={
+                "emitido_por": usuarios[Usuario.Tipo.ATENDENTE],
+                "status": Orcamento.Status.AGUARDANDO_APROVACAO,
+                "valor_mao_obra": Decimal("280.00"),
+                "valor_pecas": Decimal("89.80"),
+                "observacoes": "Orçamento fictício pronto para aprovação do cliente.",
+                "validade": timezone.localdate() + timedelta(days=30),
+                "decidido_em": None,
+                "decidido_por": None,
+            },
+        )
+        ItemOrcamentoServico.objects.update_or_create(
+            orcamento=orcamento,
+            descricao="Revisão preventiva completa",
+            defaults={"quantidade": 1, "valor_unitario": Decimal("280.00")},
+        )
+        ItemOrcamentoPeca.objects.update_or_create(
+            orcamento=orcamento,
+            peca=peca,
+            defaults={"quantidade": 2, "valor_unitario": Decimal("44.90")},
+        )
+        HistoricoStatusOrdem.objects.get_or_create(
+            ordem_servico=ordem,
+            status_anterior=OrdemServico.Status.AGUARDANDO_ORCAMENTO,
+            novo_status=OrdemServico.Status.AGUARDANDO_APROVACAO,
+            defaults={
+                "responsavel": usuarios[Usuario.Tipo.ATENDENTE],
+                "observacao": "Orçamento demonstrativo emitido.",
+            },
+        )
+        self.stdout.write(self.style.SUCCESS("Dados de demonstração criados/restaurados com sucesso."))
