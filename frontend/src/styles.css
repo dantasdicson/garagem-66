@@ -349,6 +349,27 @@ tbody tr:hover { background: #f7f8f9; }
 .budget-total { color: var(--g66-accent-dark); font-family: Consolas, monospace; }
 .budget-detail-aprovado .budget-total { color: #176b36; }
 .budget-note { border-left-color: var(--g66-accent); background: #fff2f2; }
+.entry-layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(400px, .75fr); gap: 22px; align-items: start; margin-top: 34px; }
+.entry-records { display: grid; gap: 22px; min-width: 0; }
+.entry-form, .inspection-detail { display: grid; gap: 10px; padding: 24px; border: 1px solid var(--g66-line); border-top: 4px solid var(--g66-ink); background: var(--g66-white); }
+.entry-form { border-top-color: var(--g66-accent); }
+.entry-form h2, .inspection-detail h2 { margin: 4px 0 14px; text-transform: uppercase; }
+.checklist-fieldset { display: grid; gap: 8px; margin: 16px 0; padding: 16px; border: 1px solid var(--g66-line); }
+.checklist-fieldset legend { padding: 0 8px; font-size: .78rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+.checklist-row { display: grid; grid-template-columns: 140px 130px 1fr; gap: 8px; align-items: center; }
+.checklist-row label { margin: 0; }
+.percentage-input { position: relative; }
+.percentage-input input { padding-right: 30px; }
+.percentage-input span { position: absolute; top: 12px; right: 12px; font-weight: 800; }
+.dynamic-section { display: grid; gap: 8px; padding-top: 14px; border-top: 1px solid var(--g66-line); }
+.dynamic-section > div:first-child { display: flex; justify-content: space-between; align-items: center; }
+.dynamic-section h3 { margin: 0; }
+.dynamic-row { display: grid; grid-template-columns: .7fr 1.3fr auto; gap: 8px; align-items: center; }
+.dynamic-row.accessory-row { grid-template-columns: 1fr auto; }
+.inspection-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.inspection-list { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--g66-ink); }
+.inspection-list li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 4px; border-bottom: 1px solid var(--g66-line); }
+.inspection-list span { color: #555d64; text-align: right; }
 
 @media (max-width: 760px) {
   .app-shell { grid-template-columns: 1fr; }
@@ -357,4 +378,7 @@ tbody tr:hover { background: #f7f8f9; }
   .sidebar nav a.active::before { display: none; }
   .topbar::before { display: none; }
   .auth-card { box-shadow: 7px 7px 0 #0008; }
+  .entry-layout, .inspection-columns { grid-template-columns: 1fr; }
+  .checklist-row { grid-template-columns: 1fr; padding-bottom: 12px; border-bottom: 1px solid var(--g66-line); }
+  .dynamic-row { grid-template-columns: 1fr; }
 }
