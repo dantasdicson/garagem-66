@@ -9,12 +9,13 @@ from .item_checklist_entrada import ItemChecklistEntradaSerializer
 from .item_orcamento_peca import ItemOrcamentoPecaSerializer
 from .item_orcamento_servico import ItemOrcamentoServicoSerializer
 from .motocicleta import MotocicletaSerializer
+from .modelo_motocicleta import ModeloMotocicletaSerializer
 from .orcamento import OrcamentoSerializer
 from .ordem_servico import AcaoStatusOrdemSerializer, OrdemServicoSerializer, ReabrirOrdemSerializer
 
 __all__ = [
     "AcessorioSerializer", "AvariaSerializer", "ClienteSerializer", "EntradaVeiculoSerializer",
     "FotoSerializer", "HistoricoStatusOrdemSerializer", "ItemChecklistEntradaSerializer", "ItemOrcamentoPecaSerializer",
-    "ItemOrcamentoServicoSerializer", "ItemServicoSerializer", "MotocicletaSerializer", "OrcamentoSerializer",
+    "ItemOrcamentoServicoSerializer", "ItemServicoSerializer", "ModeloMotocicletaSerializer", "MotocicletaSerializer", "OrcamentoSerializer",
     "AcaoStatusOrdemSerializer", "OrdemServicoSerializer", "ReabrirOrdemSerializer",
 ]

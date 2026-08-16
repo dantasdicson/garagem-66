@@ -9,7 +9,8 @@ from .item_checklist_entrada import ItemChecklistEntradaViewSet
 from .item_orcamento_peca import ItemOrcamentoPecaViewSet
 from .item_orcamento_servico import ItemOrcamentoServicoViewSet
 from .motocicleta import MotocicletaViewSet
+from .modelo_motocicleta import ModeloMotocicletaViewSet
 from .orcamento import OrcamentoViewSet
 from .ordem_servico import OrdemServicoViewSet
 
-__all__ = ["AcessorioViewSet", "AvariaViewSet", "ClienteViewSet", "EntradaVeiculoViewSet", "FotoViewSet", "HistoricoStatusOrdemViewSet", "ItemChecklistEntradaViewSet", "ItemOrcamentoPecaViewSet", "ItemOrcamentoServicoViewSet", "ItemServicoViewSet", "MotocicletaViewSet", "OrcamentoViewSet", "OrdemServicoViewSet"]
+__all__ = ["AcessorioViewSet", "AvariaViewSet", "ClienteViewSet", "EntradaVeiculoViewSet", "FotoViewSet", "HistoricoStatusOrdemViewSet", "ItemChecklistEntradaViewSet", "ItemOrcamentoPecaViewSet", "ItemOrcamentoServicoViewSet", "ItemServicoViewSet", "ModeloMotocicletaViewSet", "MotocicletaViewSet", "OrcamentoViewSet", "OrdemServicoViewSet"]

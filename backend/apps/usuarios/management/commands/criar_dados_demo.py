@@ -12,6 +12,7 @@ from apps.oficina.models import (
     HistoricoStatusOrdem,
     ItemOrcamentoPeca,
     ItemOrcamentoServico,
+    ModeloMotocicleta,
     Motocicleta,
     Orcamento,
     OrdemServico,
@@ -25,6 +26,48 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **options):
         senha = os.environ.get("DEMO_PASSWORD", "Garagem66@Demo")
+        fontes = {
+            "Honda": "https://www.honda.com.br/motos/adventure",
+            "Yamaha": "https://www.yamaha-motor.com.br/trail",
+            "BMW": "https://www.bmw-motorrad.com.br/pt/models/modeloverview.html",
+            "Triumph": "https://www.triumphmotorcycles.com.br/motocicletas/adventure",
+            "Suzuki": "https://suzukimotos.com.br/",
+            "Royal Enfield": "https://www.royalenfield.com/br/pt/motorcycles/new-himalayan/",
+        }
+        catalogo = {
+            "Honda": {
+                "TRAIL": ["NXR 160 Bros", "XRE 190", "XR 300L Tornado", "XRE 300 Sahara"],
+                "BIG_TRAIL": ["NX 500", "NC 750X", "XL 750 Transalp", "CRF 1100L Africa Twin"],
+            },
+            "Yamaha": {
+                "TRAIL": ["Crosser 150 S ABS", "Crosser 150 Z ABS", "Lander Connected"],
+                "BIG_TRAIL": ["Ténéré 700"],
+            },
+            "BMW": {
+                "TRAIL": ["G 310 GS"],
+                "BIG_TRAIL": ["F 800 GS", "F 900 GS", "F 900 GS Adventure", "R 1300 GS", "R 1300 GS Adventure"],
+            },
+            "Triumph": {
+                "TRAIL": [],
+                "BIG_TRAIL": ["Tiger Sport 660", "Tiger Sport 800", "Tiger 900", "Tiger 1200"],
+            },
+            "Suzuki": {
+                "TRAIL": [],
+                "BIG_TRAIL": ["V-Strom 800 DE", "V-Strom 1050"],
+            },
+            "Royal Enfield": {
+                "TRAIL": ["Himalayan 450"],
+                "BIG_TRAIL": [],
+            },
+        }
+        for marca, categorias in catalogo.items():
+            for categoria, modelos in categorias.items():
+                for modelo in modelos:
+                    ModeloMotocicleta.objects.update_or_create(
+                        marca=marca,
+                        modelo=modelo,
+                        defaults={"categoria": categoria, "ativo": True, "fonte_url": fontes[marca]},
+                    )
         usuarios = {}
         configuracoes = {
             "admin.demo": ("Administrador", "Demo", Usuario.Tipo.ADMINISTRADOR),

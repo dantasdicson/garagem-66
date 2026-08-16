@@ -1,8 +1,15 @@
 from django.contrib import admin
 
-from .models import Acessorio, Avaria, Cliente, EntradaVeiculo, Foto, HistoricoStatusOrdem, ItemChecklistEntrada, ItemOrcamentoPeca, ItemOrcamentoServico, ItemServico, Motocicleta, Orcamento, OrdemServico
+from .models import Acessorio, Avaria, Cliente, EntradaVeiculo, Foto, HistoricoStatusOrdem, ItemChecklistEntrada, ItemOrcamentoPeca, ItemOrcamentoServico, ItemServico, ModeloMotocicleta, Motocicleta, Orcamento, OrdemServico
 
 admin.site.register([Cliente, Motocicleta, OrdemServico, ItemServico, EntradaVeiculo, ItemChecklistEntrada, Foto, Avaria, Acessorio])
+
+
+@admin.register(ModeloMotocicleta)
+class ModeloMotocicletaAdmin(admin.ModelAdmin):
+    list_display = ("marca", "modelo", "categoria", "ativo")
+    list_filter = ("marca", "categoria", "ativo")
+    search_fields = ("marca", "modelo")
 
 
 @admin.register(Orcamento)

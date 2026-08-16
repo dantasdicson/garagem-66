@@ -12,6 +12,7 @@ export default function MotocicletasPage() {
   const podeGerenciar = ["ADMINISTRADOR", "ATENDENTE"].includes(usuario.tipo);
   const [motocicletas, setMotocicletas] = useState([]);
   const [clientes, setClientes] = useState([]);
+  const [catalogo, setCatalogo] = useState([]);
   const [form, setForm] = useState(formularioVazio);
   const [editandoId, setEditandoId] = useState(null);
   const [carregando, setCarregando] = useState(true);
@@ -24,9 +25,11 @@ export default function MotocicletasPage() {
     try {
       const requisicaoMotos = apiRequest("/oficina/motocicletas/");
       const requisicaoClientes = podeGerenciar ? apiRequest("/oficina/clientes/") : Promise.resolve([]);
-      const [dadosMotos, dadosClientes] = await Promise.all([requisicaoMotos, requisicaoClientes]);
+      const requisicaoCatalogo = podeGerenciar ? apiRequest("/oficina/modelos-motocicleta/") : Promise.resolve([]);
+      const [dadosMotos, dadosClientes, dadosCatalogo] = await Promise.all([requisicaoMotos, requisicaoClientes, requisicaoCatalogo]);
       setMotocicletas(extrairLista(dadosMotos));
       setClientes(extrairLista(dadosClientes));
+      setCatalogo(extrairLista(dadosCatalogo));
     } catch (error) { setErro(error.message); } finally { setCarregando(false); }
   }, [podeGerenciar]);
 
@@ -64,6 +67,8 @@ export default function MotocicletasPage() {
         )}</div>
         {podeGerenciar ? <form className="form-card" onSubmit={salvar}><div><p className="eyebrow">{editandoId ? "Edição" : "Novo cadastro"}</p><h2>{editandoId ? "Editar motocicleta" : "Cadastrar motocicleta"}</h2></div>
           <label htmlFor="moto-cliente">Proprietário</label><select id="moto-cliente" required value={form.cliente} onChange={(e) => setForm((v) => ({ ...v, cliente: e.target.value }))}><option value="">Selecione um cliente</option>{clientes.map((cliente) => <option key={cliente.id} value={cliente.id}>{cliente.nome}</option>)}</select>
+          <label htmlFor="moto-catalogo">Catálogo trail e adventure</label><select id="moto-catalogo" value="" onChange={(e) => { const item = catalogo.find((modelo) => modelo.id === Number(e.target.value)); if (item) setForm((v) => ({ ...v, marca: item.marca, modelo: item.modelo })); }}><option value="">Selecione para preencher marca e modelo</option>{catalogo.map((item) => <option key={item.id} value={item.id}>{item.marca} — {item.modelo} ({item.categoria_nome})</option>)}</select>
+          <small className="muted">Para modelos antigos ou de outra categoria, preencha manualmente.</small>
           <div className="field-row"><div><label htmlFor="moto-marca">Marca</label><input id="moto-marca" required value={form.marca} onChange={(e) => setForm((v) => ({ ...v, marca: e.target.value }))} /></div><div><label htmlFor="moto-modelo">Modelo</label><input id="moto-modelo" required value={form.modelo} onChange={(e) => setForm((v) => ({ ...v, modelo: e.target.value }))} /></div></div>
           <div className="field-row"><div><label htmlFor="moto-ano">Ano</label><input id="moto-ano" type="number" min="1900" max="2100" required value={form.ano} onChange={(e) => setForm((v) => ({ ...v, ano: e.target.value }))} /></div><div><label htmlFor="moto-placa">Placa</label><input id="moto-placa" required maxLength="10" value={form.placa} onChange={(e) => setForm((v) => ({ ...v, placa: e.target.value.toUpperCase() }))} /></div></div>
           <label htmlFor="moto-chassi">Chassi</label><input id="moto-chassi" value={form.chassi} onChange={(e) => setForm((v) => ({ ...v, chassi: e.target.value.toUpperCase() }))} />
