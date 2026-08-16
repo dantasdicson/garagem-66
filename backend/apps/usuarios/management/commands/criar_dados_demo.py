@@ -33,6 +33,7 @@ class Command(BaseCommand):
             "52998224725": ("Marina", "Oliveira", Usuario.Tipo.CLIENTE),
         }
         for username, (nome, sobrenome, tipo) in configuracoes.items():
+            eh_administrador = tipo == Usuario.Tipo.ADMINISTRADOR
             usuario, _ = Usuario.objects.update_or_create(
                 username=username,
                 defaults={
@@ -41,8 +42,8 @@ class Command(BaseCommand):
                     "last_name": sobrenome,
                     "tipo": tipo,
                     "is_active": True,
-                    "is_staff": False,
-                    "is_superuser": False,
+                    "is_staff": eh_administrador,
+                    "is_superuser": eh_administrador,
                     "deve_alterar_senha": False,
                 },
             )

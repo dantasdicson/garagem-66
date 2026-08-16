@@ -18,4 +18,6 @@ class DadosDemoCommandTests(TestCase):
         self.assertEqual(ordem.status, OrdemServico.Status.AGUARDANDO_APROVACAO)
         self.assertEqual(Orcamento.objects.filter(ordem_servico=ordem).count(), 1)
         self.assertTrue(Usuario.objects.get(username="admin.demo").check_password("Garagem66@Demo"))
-        self.assertFalse(Usuario.objects.get(username="admin.demo").is_staff)
+        administrador = Usuario.objects.get(username="admin.demo")
+        self.assertTrue(administrador.is_staff)
+        self.assertTrue(administrador.is_superuser)
