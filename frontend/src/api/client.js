@@ -47,7 +47,7 @@ export async function apiRequest(caminho, opcoes = {}, repetir = true) {
   if (!(opcoes.body instanceof FormData)) headers.set("Content-Type", "application/json");
   if (sessao?.access) headers.set("Authorization", `Bearer ${sessao.access}`);
 
-  const response = await fetch(`${API_URL}${caminho}`, { ...opcoes, headers });
+  const response = await fetch(`${API_URL}${caminho}`, { cache: "no-store", ...opcoes, headers });
   if (response.status === 401 && repetir && sessao?.refresh) {
     const novoToken = await obterNovoToken();
     if (novoToken) return apiRequest(caminho, opcoes, false);
@@ -58,4 +58,3 @@ export async function apiRequest(caminho, opcoes = {}, repetir = true) {
 }
 
 export { API_URL };
-

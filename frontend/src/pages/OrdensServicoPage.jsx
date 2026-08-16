@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { apiRequest } from "../api/client";
 import { useAuth } from "../contexts/AuthContext";
@@ -33,6 +33,7 @@ function acoesDisponiveis(ordem, tipoUsuario) {
 
 export default function OrdensServicoPage() {
   const { usuario } = useAuth();
+  const navigate = useNavigate();
   const [parametros] = useSearchParams();
   const podeCadastrar = ["ADMINISTRADOR", "ATENDENTE"].includes(usuario.tipo);
   const [ordens, setOrdens] = useState([]);
@@ -113,6 +114,7 @@ export default function OrdensServicoPage() {
       }
       setForm(formularioVazio);
       await carregar();
+      navigate("/entradas");
     } catch (error) {
       setErro(error.message);
     } finally {
