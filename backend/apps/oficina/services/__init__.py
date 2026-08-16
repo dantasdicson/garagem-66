@@ -2,6 +2,7 @@ from .cliente import atualizar_cliente, cadastrar_cliente_com_acesso, normalizar
 from .entrada_veiculo import registrar_entrada_veiculo
 from .execucao import validar_execucao_ordem
 from .item_servico import registrar_item_servico
+from .ordem_servico import abrir_ordem_servico
 from .status_ordem import (
     alterar_status_ordem,
     concluir_ordem,
@@ -20,6 +21,7 @@ from .orcamento import (
 __all__ = [
     "adicionar_peca_prevista",
     "adicionar_servico_previsto",
+    "abrir_ordem_servico",
     "decidir_orcamento",
     "emitir_orcamento",
     "remover_item_previsto",

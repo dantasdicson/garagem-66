@@ -5,7 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { extrairLista } from "../utils/apiData";
 
 const formularioVazio = {
-  numero: "", motocicleta: "", mecanico: "", tipo_manutencao: "CORRETIVA", descricao_problema: "",
+  motocicleta: "", mecanico: "", tipo_manutencao: "CORRETIVA", descricao_problema: "",
 };
 
 const nomesStatus = {
@@ -81,7 +81,6 @@ export default function OrdensServicoPage() {
     setErro("");
     setSalvando(true);
     const dados = {
-      numero: form.numero.trim(),
       motocicleta: moto.id,
       cliente: moto.cliente,
       mecanico: form.mecanico ? Number(form.mecanico) : null,
@@ -136,7 +135,7 @@ export default function OrdensServicoPage() {
             }) : <tr><td colSpan="5" className="empty-cell">Nenhuma ordem de serviço encontrada.</td></tr>}</tbody></table></div>
         )}</div>
         {podeCadastrar ? <form className="form-card" onSubmit={salvar}><div><p className="eyebrow">Novo atendimento</p><h2>Abrir ordem</h2></div>
-          <label htmlFor="os-numero">Número da OS</label><input id="os-numero" required maxLength="20" placeholder="OS-2026-001" value={form.numero} onChange={(e) => setForm((valor) => ({ ...valor, numero: e.target.value.toUpperCase() }))} />
+          <p className="generated-field"><span>Número da OS</span><strong>Gerado automaticamente ao salvar</strong></p>
           <label htmlFor="os-moto">Motocicleta</label><select id="os-moto" required value={form.motocicleta} onChange={(e) => setForm((valor) => ({ ...valor, motocicleta: e.target.value }))}><option value="">Selecione</option>{motocicletas.map((moto) => <option key={moto.id} value={moto.id}>{moto.placa} — {moto.marca} {moto.modelo}</option>)}</select>
           {usuario.tipo === "ADMINISTRADOR" ? <><label htmlFor="os-mecanico">Mecânico</label><select id="os-mecanico" value={form.mecanico} onChange={(e) => setForm((valor) => ({ ...valor, mecanico: e.target.value }))}><option value="">Atribuir depois</option>{mecanicos.map((mecanico) => <option key={mecanico.id} value={mecanico.id}>{mecanico.first_name} {mecanico.last_name}</option>)}</select></> : null}
           <label htmlFor="os-tipo">Tipo de manutenção</label><select id="os-tipo" value={form.tipo_manutencao} onChange={(e) => setForm((valor) => ({ ...valor, tipo_manutencao: e.target.value }))}><option value="CORRETIVA">Corretiva</option><option value="PREVENTIVA">Preventiva</option></select>

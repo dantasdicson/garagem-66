@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from ..models import OrdemServico
+from ..services import abrir_ordem_servico
 from apps.usuarios.models import Usuario
 
 
@@ -16,7 +17,10 @@ class OrdemServicoSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrdemServico
         fields = "__all__"
-        read_only_fields = ("id", "status", "aberta_em", "atualizada_em", "concluida_em")
+        read_only_fields = ("id", "numero", "status", "aberta_em", "atualizada_em", "concluida_em")
+
+    def create(self, validated_data):
+        return abrir_ordem_servico(**validated_data)
 
     def validate(self, attrs):
         motocicleta = attrs.get("motocicleta", getattr(self.instance, "motocicleta", None))

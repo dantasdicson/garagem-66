@@ -327,6 +327,9 @@ tbody tr:hover { background: #f2efe6; }
 
 .form-card { border-top-color: var(--g66-accent); }
 .form-card h2, .budget-detail h2 { text-transform: uppercase; }
+.generated-field { display: grid; gap: 4px; margin: 8px 0; padding: 11px 12px; border-left: 4px solid var(--g66-accent); background: #e4e2da; }
+.generated-field span { color: #666c66; font-size: .75rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.generated-field strong { font-family: Consolas, monospace; font-size: .86rem; }
 
 .status-badge {
   border: 1px solid currentColor;
