@@ -1,8 +1,9 @@
 from rest_framework import serializers
 
-from ..models import Cliente, Motocicleta, OrdemServico
-from ..services import abrir_atendimento_com_motocicleta, abrir_ordem_servico
 from apps.usuarios.models import Usuario
+from ..models import Cliente, Motocicleta, OrdemServico
+from ..services import abrir_ordem_servico, iniciar_atendimento
+from .entrada_veiculo import AcessorioEntradaSerializer, AvariaEntradaSerializer, ItemChecklistEntradaAninhadoSerializer
 
 
 class AcaoStatusOrdemSerializer(serializers.Serializer):
@@ -15,15 +16,23 @@ class ReabrirOrdemSerializer(serializers.Serializer):
 
 class AbrirAtendimentoSerializer(serializers.Serializer):
     cliente = serializers.PrimaryKeyRelatedField(queryset=Cliente.objects.all())
-    marca = serializers.CharField(max_length=80)
-    modelo = serializers.CharField(max_length=100)
-    ano = serializers.IntegerField(min_value=1900, max_value=2100)
-    placa = serializers.CharField(max_length=10)
+    motocicleta = serializers.PrimaryKeyRelatedField(queryset=Motocicleta.objects.all(), required=False, allow_null=True)
+    marca = serializers.CharField(max_length=80, required=False)
+    modelo = serializers.CharField(max_length=100, required=False)
+    ano = serializers.IntegerField(min_value=1900, max_value=2100, required=False)
+    placa = serializers.CharField(max_length=10, required=False)
     chassi = serializers.CharField(max_length=30, required=False, allow_blank=True, allow_null=True)
     cor = serializers.CharField(max_length=50, required=False, allow_blank=True, default="")
     mecanico = serializers.PrimaryKeyRelatedField(queryset=Usuario.objects.filter(tipo=Usuario.Tipo.MECANICO), required=False, allow_null=True)
     tipo_manutencao = serializers.ChoiceField(choices=OrdemServico.TipoManutencao.choices)
     descricao_problema = serializers.CharField()
+    quilometragem = serializers.IntegerField(min_value=0, required=False, allow_null=True)
+    nivel_combustivel = serializers.CharField(max_length=50, required=False, allow_blank=True, default="")
+    motivo_entrada = serializers.CharField()
+    observacoes = serializers.CharField(required=False, allow_blank=True, default="")
+    itens_checklist = ItemChecklistEntradaAninhadoSerializer(many=True)
+    avarias = AvariaEntradaSerializer(many=True, required=False, default=list)
+    acessorios = AcessorioEntradaSerializer(many=True, required=False, default=list)
 
     def validate_placa(self, valor):
         placa = valor.strip().upper()
@@ -37,13 +46,31 @@ class AbrirAtendimentoSerializer(serializers.Serializer):
             raise serializers.ValidationError("Este chassi já está cadastrado.")
         return chassi
 
+    def validate(self, attrs):
+        motocicleta = attrs.get("motocicleta")
+        if motocicleta and motocicleta.cliente_id != attrs["cliente"].id:
+            raise serializers.ValidationError({"motocicleta": "A motocicleta não pertence ao cliente informado."})
+        if not motocicleta:
+            faltantes = [campo for campo in ("marca", "modelo", "ano", "placa") if not attrs.get(campo)]
+            if faltantes:
+                raise serializers.ValidationError({campo: "Campo obrigatório para uma nova motocicleta." for campo in faltantes})
+        return attrs
+
     def create(self, validated_data):
         cliente = validated_data.pop("cliente")
+        motocicleta = validated_data.pop("motocicleta", None)
         campos_moto = ("marca", "modelo", "ano", "placa", "chassi", "cor")
-        dados_motocicleta = {campo: validated_data.pop(campo) for campo in campos_moto}
-        return abrir_atendimento_com_motocicleta(
-            cliente=cliente, dados_motocicleta=dados_motocicleta, dados_ordem=validated_data,
+        dados_motocicleta = {campo: validated_data.pop(campo, None) for campo in campos_moto} if motocicleta is None else None
+        if motocicleta is not None:
+            for campo in campos_moto:
+                validated_data.pop(campo, None)
+        campos_entrada = ("quilometragem", "nivel_combustivel", "motivo_entrada", "observacoes", "itens_checklist", "avarias", "acessorios")
+        dados_entrada = {campo: validated_data.pop(campo) for campo in campos_entrada}
+        ordem, _ = iniciar_atendimento(
+            cliente=cliente, responsavel=self.context["request"].user, motocicleta=motocicleta,
+            dados_motocicleta=dados_motocicleta, dados_ordem=validated_data, dados_entrada=dados_entrada,
         )
+        return ordem
 
 
 class OrdemServicoSerializer(serializers.ModelSerializer):

@@ -35,7 +35,8 @@ export default function OrdensServicoPage() {
   const { usuario } = useAuth();
   const navigate = useNavigate();
   const [parametros] = useSearchParams();
-  const podeCadastrar = ["ADMINISTRADOR", "ATENDENTE"].includes(usuario.tipo);
+  const podeIniciar = ["ADMINISTRADOR", "ATENDENTE"].includes(usuario.tipo);
+  const podeCadastrar = false;
   const [ordens, setOrdens] = useState([]);
   const [motocicletas, setMotocicletas] = useState([]);
   const [clientes, setClientes] = useState([]);
@@ -143,7 +144,7 @@ export default function OrdensServicoPage() {
   return (
     <section className="page-section">
       <div className="page-heading"><div><p className="eyebrow">Oficina</p><h1>{usuario.tipo === "CLIENTE" ? "Minhas ordens" : "Ordens de serviço"}</h1>
-        <p className="lead">Acompanhe o atendimento da abertura até a conclusão.</p></div></div>
+        <p className="lead">Acompanhe o atendimento da abertura até a conclusão.</p></div>{podeIniciar ? <button className="button button-primary" type="button" onClick={() => navigate("/novo-atendimento")}>Novo atendimento</button> : null}</div>
       {erro ? <p className="form-error" role="alert">{erro}</p> : null}
       <div className={podeCadastrar ? "management-grid" : "management-grid single-column"}>
         <div className="table-card">{carregando ? <p className="muted" role="status">Carregando ordens...</p> : (

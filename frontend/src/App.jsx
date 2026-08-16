@@ -26,7 +26,8 @@ export default function App() {
           <Route path="/ordens" element={<OrdensServicoPage />} />
           <Route path="/minhas-ordens" element={<OrdensServicoPage />} />
           <Route path="/orcamentos" element={<OrcamentosPage />} />
-          <Route path="/entradas" element={<EntradasVeiculoPage />} />
+          <Route path="/novo-atendimento" element={<EntradasVeiculoPage />} />
+          <Route path="/entradas" element={<Navigate to="/novo-atendimento" replace />} />
           <Route path="/:modulo" element={<ModuloPage />} />
         </Route>
       </Route>

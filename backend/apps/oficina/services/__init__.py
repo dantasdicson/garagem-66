@@ -2,7 +2,7 @@ from .cliente import atualizar_cliente, cadastrar_cliente_com_acesso, normalizar
 from .entrada_veiculo import registrar_entrada_veiculo
 from .execucao import validar_execucao_ordem
 from .item_servico import registrar_item_servico
-from .ordem_servico import abrir_atendimento_com_motocicleta, abrir_ordem_servico
+from .ordem_servico import abrir_atendimento_com_motocicleta, abrir_ordem_servico, iniciar_atendimento
 from .status_ordem import (
     alterar_status_ordem,
     concluir_ordem,
@@ -23,6 +23,7 @@ __all__ = [
     "adicionar_servico_previsto",
     "abrir_ordem_servico",
     "abrir_atendimento_com_motocicleta",
+    "iniciar_atendimento",
     "decidir_orcamento",
     "emitir_orcamento",
     "remover_item_previsto",

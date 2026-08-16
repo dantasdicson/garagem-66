@@ -4,7 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 const menusPorPerfil = {
   ADMINISTRADOR: ["clientes", "motocicletas", "ordens", "orcamentos", "estoque", "usuarios"],
-  ATENDENTE: ["clientes", "motocicletas", "entradas", "ordens", "orcamentos", "estoque"],
+  ATENDENTE: ["clientes", "motocicletas", "ordens", "orcamentos", "estoque"],
   MECANICO: ["minhas-ordens", "requisicoes", "estoque"],
   CLIENTE: ["minhas-motos", "minhas-ordens", "orcamentos", "historico"],
 };
@@ -37,4 +37,3 @@ export default function AppLayout() {
     </div>
   );
 }
-

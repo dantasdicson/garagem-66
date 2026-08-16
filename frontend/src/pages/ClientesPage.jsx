@@ -60,7 +60,7 @@ export default function ClientesPage() {
       const novoCadastro = !editandoId;
       cancelar();
       await carregar();
-      if (novoCadastro) navigate(`/ordens?cliente=${clienteSalvo.id}&nova_moto=1`);
+      if (novoCadastro) navigate(`/novo-atendimento?cliente=${clienteSalvo.id}&nova_moto=1`);
     } catch (error) {
       setErro(error.message);
     } finally {

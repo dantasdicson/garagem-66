@@ -1,28 +1,30 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { apiRequest } from "../api/client";
 import { extrairLista } from "../utils/apiData";
 
 const itensChecklist = [
   ["PNEU_DIANTEIRO", "Pneu dianteiro", true], ["PNEU_TRASEIRO", "Pneu traseiro", true],
-  ["RODAS", "Rodas", false], ["FREIOS", "Freios", false],
-  ["ILUMINACAO", "Faróis e lanternas", false], ["RETROVISORES", "Retrovisores", false],
-  ["CARENAGENS", "Carenagens", false], ["SUSPENSAO", "Suspensão", false], ["PAINEL", "Painel", false],
+  ["RODAS", "Rodas", false], ["FREIOS", "Freios", false], ["ILUMINACAO", "Faróis e lanternas", false],
+  ["RETROVISORES", "Retrovisores", false], ["CARENAGENS", "Carenagens", false],
+  ["SUSPENSAO", "Suspensão", false], ["PAINEL", "Painel", false],
 ];
-const estados = { NORMAL: "Normal", COM_AVARIA: "Com avaria", NAO_VERIFICADO: "Não verificado" };
-const formularioVazio = { ordem_servico: "", quilometragem: "", nivel_combustivel: "", motivo_entrada: "", observacoes: "" };
-
+const formularioVazio = {
+  cliente: "", motocicleta: "", nova_motocicleta: true, modelo_catalogo: "", marca: "", modelo: "",
+  ano: "", placa: "", chassi: "", cor: "", tipo_manutencao: "CORRETIVA", descricao_problema: "",
+  quilometragem: "", nivel_combustivel: "", motivo_entrada: "", observacoes: "",
+};
 function checklistInicial() {
-  return Object.fromEntries(itensChecklist.map(([item, , percentual]) => [item, {
-    estado: percentual ? "" : "NORMAL", percentual: percentual ? "100" : "", observacao: "",
-  }]));
+  return Object.fromEntries(itensChecklist.map(([item, , pneu]) => [item, { estado: pneu ? "" : "NORMAL", percentual: pneu ? "100" : "", observacao: "" }]));
 }
 
 export default function EntradasVeiculoPage() {
-  const [entradas, setEntradas] = useState([]);
-  const [ordens, setOrdens] = useState([]);
+  const navigate = useNavigate();
+  const [parametros] = useSearchParams();
+  const [clientes, setClientes] = useState([]);
   const [motocicletas, setMotocicletas] = useState([]);
-  const [selecionadaId, setSelecionadaId] = useState(null);
+  const [catalogo, setCatalogo] = useState([]);
   const [form, setForm] = useState(formularioVazio);
   const [checklist, setChecklist] = useState(checklistInicial);
   const [avarias, setAvarias] = useState([]);
@@ -30,28 +32,22 @@ export default function EntradasVeiculoPage() {
   const [carregando, setCarregando] = useState(true);
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState("");
+  const motosDoCliente = useMemo(() => motocicletas.filter((moto) => moto.cliente === Number(form.cliente)), [form.cliente, motocicletas]);
 
-  const ordensPorId = useMemo(() => new Map(ordens.map((ordem) => [ordem.id, ordem])), [ordens]);
-  const motosPorId = useMemo(() => new Map(motocicletas.map((moto) => [moto.id, moto])), [motocicletas]);
-  const ordensComEntrada = useMemo(() => new Set(entradas.map((entrada) => entrada.ordem_servico)), [entradas]);
-  const ordensElegiveis = useMemo(() => ordens.filter(
-    (ordem) => ordem.status === "ABERTA" && !ordensComEntrada.has(ordem.id),
-  ), [ordens, ordensComEntrada]);
-  const selecionada = entradas.find((entrada) => entrada.id === selecionadaId) || null;
-
-  const carregar = useCallback(async (manterSelecao = true) => {
-    setErro(""); setCarregando(true);
+  const carregar = useCallback(async () => {
+    setCarregando(true);
     try {
-      const [dadosEntradas, dadosOrdens, dadosMotos] = await Promise.all([
-        apiRequest("/oficina/entradas-veiculo/"), apiRequest("/oficina/ordens-servico/"), apiRequest("/oficina/motocicletas/"),
+      const [dadosClientes, dadosMotos, dadosCatalogo] = await Promise.all([
+        apiRequest("/oficina/clientes/"), apiRequest("/oficina/motocicletas/"), apiRequest("/oficina/modelos-motocicleta/"),
       ]);
-      const lista = extrairLista(dadosEntradas);
-      setEntradas(lista); setOrdens(extrairLista(dadosOrdens)); setMotocicletas(extrairLista(dadosMotos));
-      setSelecionadaId((atual) => manterSelecao && lista.some((entrada) => entrada.id === atual) ? atual : lista[0]?.id ?? null);
+      setClientes(extrairLista(dadosClientes)); setMotocicletas(extrairLista(dadosMotos)); setCatalogo(extrairLista(dadosCatalogo));
     } catch (error) { setErro(error.message); } finally { setCarregando(false); }
   }, []);
-
-  useEffect(() => { carregar(false); }, [carregar]);
+  useEffect(() => { carregar(); }, [carregar]);
+  useEffect(() => {
+    const cliente = parametros.get("cliente");
+    if (cliente) setForm((atual) => ({ ...atual, cliente, nova_motocicleta: parametros.get("nova_moto") === "1" }));
+  }, [parametros]);
 
   function atualizarChecklist(item, campo, valor) {
     setChecklist((atual) => ({ ...atual, [item]: { ...atual[item], [campo]: valor } }));
@@ -60,39 +56,42 @@ export default function EntradasVeiculoPage() {
     definir((atual) => atual.map((item, posicao) => posicao === indice ? { ...item, [campo]: valor } : item));
   }
 
-  async function registrar(event) {
+  async function salvar(event) {
     event.preventDefault(); setErro(""); setSalvando(true);
-    const dadosChecklist = itensChecklist.map(([item, , usaPercentual]) => ({
-      item, estado: usaPercentual ? "" : checklist[item].estado,
-      percentual: usaPercentual ? Number(checklist[item].percentual) : null,
+    const itens = itensChecklist.map(([item, , pneu]) => ({
+      item, estado: pneu ? "" : checklist[item].estado, percentual: pneu ? Number(checklist[item].percentual) : null,
       observacao: checklist[item].observacao.trim(),
     }));
+    const dados = {
+      cliente: Number(form.cliente), motocicleta: form.nova_motocicleta ? null : Number(form.motocicleta),
+      tipo_manutencao: form.tipo_manutencao, descricao_problema: form.descricao_problema.trim(),
+      quilometragem: form.quilometragem ? Number(form.quilometragem) : null, nivel_combustivel: form.nivel_combustivel,
+      motivo_entrada: form.motivo_entrada.trim(), observacoes: form.observacoes.trim(), itens_checklist: itens,
+      avarias: avarias.filter((item) => item.descricao.trim()), acessorios: acessorios.filter((item) => item.descricao.trim()),
+    };
+    if (form.nova_motocicleta) Object.assign(dados, {
+      marca: form.marca.trim(), modelo: form.modelo.trim(), ano: Number(form.ano), placa: form.placa.trim().toUpperCase(),
+      chassi: form.chassi.trim().toUpperCase() || null, cor: form.cor.trim(),
+    });
     try {
-      const criada = await apiRequest("/oficina/entradas-veiculo/", { method: "POST", body: JSON.stringify({
-        ordem_servico: Number(form.ordem_servico), quilometragem: form.quilometragem ? Number(form.quilometragem) : null,
-        nivel_combustivel: form.nivel_combustivel, motivo_entrada: form.motivo_entrada.trim(), observacoes: form.observacoes.trim(),
-        itens_checklist: dadosChecklist,
-        avarias: avarias.filter((item) => item.descricao.trim()).map((item) => ({ descricao: item.descricao.trim(), localizacao: item.localizacao.trim() })),
-        acessorios: acessorios.filter((item) => item.descricao.trim()).map((item) => ({ descricao: item.descricao.trim() })),
-      }) });
-      setForm(formularioVazio); setChecklist(checklistInicial()); setAvarias([]); setAcessorios([]);
-      await carregar(); setSelecionadaId(criada.id);
+      await apiRequest("/oficina/ordens-servico/abrir-atendimento/", { method: "POST", body: JSON.stringify(dados) });
+      navigate("/orcamentos");
     } catch (error) { setErro(error.message); } finally { setSalvando(false); }
   }
 
-  function referencias(entrada) {
-    const ordem = ordensPorId.get(entrada.ordem_servico);
-    return { ordem, moto: motosPorId.get(ordem?.motocicleta) };
-  }
-
   return <section className="page-section">
-    <div className="page-heading"><div><p className="eyebrow">Recepção técnica</p><h1>Entrada da motocicleta</h1><p className="lead">Registre as condições do veículo recebidas junto com a ordem de serviço.</p></div></div>
+    <div className="page-heading"><div><p className="eyebrow">Recepção</p><h1>Novo atendimento</h1><p className="lead">Registre cliente, motocicleta e vistoria. A ordem de serviço será gerada automaticamente.</p></div></div>
     {erro ? <p className="form-error" role="alert">{erro}</p> : null}
-    <div className="entry-layout"><div className="entry-records"><div className="table-card">{carregando ? <p className="muted" role="status">Carregando entradas...</p> : <div className="table-scroll"><table><thead><tr><th>Ordem</th><th>Motocicleta</th><th>Quilometragem</th><th><span className="sr-only">Ações</span></th></tr></thead><tbody>{entradas.length ? entradas.map((entrada) => { const { ordem, moto } = referencias(entrada); return <tr key={entrada.id} className={entrada.id === selecionadaId ? "selected-row" : ""}><td><strong>{ordem?.numero || `OS #${entrada.ordem_servico}`}</strong><small>{entrada.motivo_entrada}</small></td><td>{moto ? `${moto.marca} ${moto.modelo}` : "Motocicleta"}<small>{moto?.placa}</small></td><td>{entrada.quilometragem ? `${entrada.quilometragem.toLocaleString("pt-BR")} km` : "Não informada"}</td><td><button className="table-action" type="button" onClick={() => setSelecionadaId(entrada.id)}>Ver vistoria</button></td></tr>; }) : <tr><td colSpan="4" className="empty-cell">Nenhuma vistoria de entrada concluída. Use o formulário ao lado para registrar a primeira.</td></tr>}</tbody></table></div>}</div>
-      {selecionada ? <article className="inspection-detail"><div><p className="eyebrow">Vistoria registrada</p><h2>{ordensPorId.get(selecionada.ordem_servico)?.numero}</h2><p>{selecionada.motivo_entrada}</p></div><dl className="budget-summary"><div><dt>Combustível</dt><dd>{selecionada.nivel_combustivel || "Não informado"}</dd></div><div><dt>Quilometragem</dt><dd>{selecionada.quilometragem ? `${selecionada.quilometragem.toLocaleString("pt-BR")} km` : "Não informada"}</dd></div><div><dt>Registro</dt><dd>{new Date(selecionada.registrada_em).toLocaleString("pt-BR")}</dd></div></dl><div className="inspection-columns"><section><h3>Checklist</h3><ul className="inspection-list">{selecionada.itens_checklist.map((item) => <li key={item.id}><strong>{itensChecklist.find(([codigo]) => codigo === item.item)?.[1] || item.item}</strong><span>{item.percentual !== null ? `${item.percentual}%` : estados[item.estado]}{item.observacao ? ` — ${item.observacao}` : ""}</span></li>)}</ul></section><section><h3>Avarias</h3>{selecionada.avarias.length ? <ul className="inspection-list">{selecionada.avarias.map((item) => <li key={item.id}><strong>{item.localizacao || "Local não informado"}</strong><span>{item.descricao}</span></li>)}</ul> : <p className="muted">Nenhuma avaria registrada.</p>}<h3>Acessórios</h3>{selecionada.acessorios.length ? <ul className="inspection-list">{selecionada.acessorios.map((item) => <li key={item.id}>{item.descricao}</li>)}</ul> : <p className="muted">Nenhum acessório registrado.</p>}</section></div>{selecionada.observacoes ? <p className="budget-note"><strong>Observações:</strong> {selecionada.observacoes}</p> : null}</article> : null}</div>
-      <form className="entry-form" onSubmit={registrar}><div><p className="eyebrow">Nova entrada</p><h2>Dados da recepção</h2></div><label htmlFor="entrada-os">OS e motocicleta</label><select id="entrada-os" required value={form.ordem_servico} onChange={(e) => setForm((atual) => ({ ...atual, ordem_servico: e.target.value }))}><option value="">Selecione</option>{ordensElegiveis.map((ordem) => { const moto = motosPorId.get(ordem.motocicleta); return <option key={ordem.id} value={ordem.id}>{ordem.numero} — {moto ? `${moto.placa} · ${moto.marca} ${moto.modelo}` : "Motocicleta"}</option>; })}</select>{!ordensElegiveis.length ? <small className="muted">A motocicleta precisa ter uma OS aberta e ainda não pode possuir entrada registrada.</small> : null}<div className="field-row"><div><label htmlFor="entrada-km">Quilometragem</label><input id="entrada-km" type="number" min="0" value={form.quilometragem} onChange={(e) => setForm((atual) => ({ ...atual, quilometragem: e.target.value }))} /></div><div><label htmlFor="entrada-combustivel">Combustível</label><select id="entrada-combustivel" value={form.nivel_combustivel} onChange={(e) => setForm((atual) => ({ ...atual, nivel_combustivel: e.target.value }))}><option value="">Não informado</option><option>Reserva</option><option>1/4 do tanque</option><option>Meio tanque</option><option>3/4 do tanque</option><option>Tanque cheio</option></select></div></div><label htmlFor="entrada-motivo">Motivo da entrada</label><textarea id="entrada-motivo" required rows="3" value={form.motivo_entrada} onChange={(e) => setForm((atual) => ({ ...atual, motivo_entrada: e.target.value }))} />
-        <fieldset className="checklist-fieldset"><legend>Checklist obrigatório</legend>{itensChecklist.map(([item, nome, usaPercentual]) => <div className="checklist-row" key={item}><label htmlFor={`check-${item}`}>{nome}</label>{usaPercentual ? <div className="percentage-input"><input id={`check-${item}`} type="number" required min="0" max="100" value={checklist[item].percentual} onChange={(e) => atualizarChecklist(item, "percentual", e.target.value)} /><span>%</span></div> : <select id={`check-${item}`} value={checklist[item].estado} onChange={(e) => atualizarChecklist(item, "estado", e.target.value)}><option value="NORMAL">Normal</option><option value="COM_AVARIA">Com avaria</option><option value="NAO_VERIFICADO">Não verificado</option></select>}<input aria-label={`Observação sobre ${nome}`} placeholder="Observação opcional" value={checklist[item].observacao} onChange={(e) => atualizarChecklist(item, "observacao", e.target.value)} /></div>)}</fieldset>
-        <section className="dynamic-section"><div><h3>Avarias</h3><button className="table-action" type="button" onClick={() => setAvarias((atual) => [...atual, { descricao: "", localizacao: "" }])}>Adicionar</button></div>{avarias.map((avaria, indice) => <div className="dynamic-row" key={indice}><input aria-label={`Local da avaria ${indice + 1}`} placeholder="Local" value={avaria.localizacao} onChange={(e) => atualizarLista(setAvarias, indice, "localizacao", e.target.value)} /><input aria-label={`Descrição da avaria ${indice + 1}`} required placeholder="Descrição da avaria" value={avaria.descricao} onChange={(e) => atualizarLista(setAvarias, indice, "descricao", e.target.value)} /><button className="remove-action" type="button" onClick={() => setAvarias((atual) => atual.filter((_, posicao) => posicao !== indice))}>Remover</button></div>)}</section>
-        <section className="dynamic-section"><div><h3>Acessórios entregues</h3><button className="table-action" type="button" onClick={() => setAcessorios((atual) => [...atual, { descricao: "" }])}>Adicionar</button></div>{acessorios.map((acessorio, indice) => <div className="dynamic-row accessory-row" key={indice}><input aria-label={`Acessório ${indice + 1}`} required placeholder="Ex.: baú traseiro" value={acessorio.descricao} onChange={(e) => atualizarLista(setAcessorios, indice, "descricao", e.target.value)} /><button className="remove-action" type="button" onClick={() => setAcessorios((atual) => atual.filter((_, posicao) => posicao !== indice))}>Remover</button></div>)}</section><label htmlFor="entrada-observacoes">Observações gerais</label><textarea id="entrada-observacoes" rows="3" value={form.observacoes} onChange={(e) => setForm((atual) => ({ ...atual, observacoes: e.target.value }))} /><button className="button button-primary" disabled={salvando || !ordensElegiveis.length} type="submit">{salvando ? "Registrando..." : "Registrar entrada e checklist"}</button></form></div>
+    <form className="intake-form" onSubmit={salvar}>
+      <section><h2>1. Cliente e motocicleta</h2><label htmlFor="at-cliente">Cliente</label><select id="at-cliente" required disabled={carregando} value={form.cliente} onChange={(e) => setForm((v) => ({ ...v, cliente: e.target.value, motocicleta: "" }))}><option value="">Selecione</option>{clientes.map((cliente) => <option key={cliente.id} value={cliente.id}>{cliente.nome} — {cliente.cpf}</option>)}</select>
+        <label className="option-toggle"><input type="checkbox" checked={form.nova_motocicleta} onChange={(e) => setForm((v) => ({ ...v, nova_motocicleta: e.target.checked }))} /> Cadastrar nova motocicleta</label>
+        {form.nova_motocicleta ? <div className="inline-vehicle-form"><label htmlFor="at-catalogo">Catálogo</label><select id="at-catalogo" value={form.modelo_catalogo} onChange={(e) => { const item = catalogo.find((modelo) => modelo.id === Number(e.target.value)); setForm((v) => ({ ...v, modelo_catalogo: e.target.value, marca: item?.marca || "", modelo: item?.modelo || "" })); }}><option value="">Selecione ou preencha manualmente</option>{catalogo.map((item) => <option key={item.id} value={item.id}>{item.marca} — {item.modelo}</option>)}</select><div className="field-row"><div><label htmlFor="at-marca">Marca</label><input id="at-marca" required value={form.marca} onChange={(e) => setForm((v) => ({ ...v, marca: e.target.value }))} /></div><div><label htmlFor="at-modelo">Modelo</label><input id="at-modelo" required value={form.modelo} onChange={(e) => setForm((v) => ({ ...v, modelo: e.target.value }))} /></div></div><div className="field-row"><div><label htmlFor="at-placa">Placa</label><input id="at-placa" required value={form.placa} onChange={(e) => setForm((v) => ({ ...v, placa: e.target.value.toUpperCase() }))} /></div><div><label htmlFor="at-chassi">Chassi</label><input id="at-chassi" value={form.chassi} onChange={(e) => setForm((v) => ({ ...v, chassi: e.target.value.toUpperCase() }))} /></div></div><div className="field-row"><div><label htmlFor="at-ano">Ano</label><input id="at-ano" type="number" min="1900" max="2100" required value={form.ano} onChange={(e) => setForm((v) => ({ ...v, ano: e.target.value }))} /></div><div><label htmlFor="at-cor">Cor</label><input id="at-cor" value={form.cor} onChange={(e) => setForm((v) => ({ ...v, cor: e.target.value }))} /></div></div></div> : <><label htmlFor="at-moto">Motocicleta cadastrada</label><select id="at-moto" required value={form.motocicleta} onChange={(e) => setForm((v) => ({ ...v, motocicleta: e.target.value }))}><option value="">Selecione</option>{motosDoCliente.map((moto) => <option key={moto.id} value={moto.id}>{moto.placa} — {moto.marca} {moto.modelo}</option>)}</select></>}
+      </section>
+      <section><h2>2. Solicitação e recepção</h2><label htmlFor="at-tipo">Tipo de manutenção</label><select id="at-tipo" value={form.tipo_manutencao} onChange={(e) => setForm((v) => ({ ...v, tipo_manutencao: e.target.value }))}><option value="CORRETIVA">Corretiva</option><option value="PREVENTIVA">Preventiva</option></select><label htmlFor="at-problema">Problema relatado</label><textarea id="at-problema" required rows="3" value={form.descricao_problema} onChange={(e) => setForm((v) => ({ ...v, descricao_problema: e.target.value }))} /><div className="field-row"><div><label htmlFor="at-km">Quilometragem</label><input id="at-km" type="number" min="0" value={form.quilometragem} onChange={(e) => setForm((v) => ({ ...v, quilometragem: e.target.value }))} /></div><div><label htmlFor="at-combustivel">Combustível</label><select id="at-combustivel" value={form.nivel_combustivel} onChange={(e) => setForm((v) => ({ ...v, nivel_combustivel: e.target.value }))}><option value="">Não informado</option><option>Reserva</option><option>1/4 do tanque</option><option>Meio tanque</option><option>3/4 do tanque</option><option>Tanque cheio</option></select></div></div><label htmlFor="at-motivo">Motivo da entrada</label><textarea id="at-motivo" required rows="3" value={form.motivo_entrada} onChange={(e) => setForm((v) => ({ ...v, motivo_entrada: e.target.value }))} /></section>
+      <section className="intake-wide"><h2>3. Checklist da motocicleta</h2><fieldset className="checklist-fieldset"><legend>Condições no recebimento</legend>{itensChecklist.map(([item, nome, pneu]) => <div className="checklist-row" key={item}><label htmlFor={`at-${item}`}>{nome}</label>{pneu ? <div className="percentage-input"><input id={`at-${item}`} type="number" min="0" max="100" required value={checklist[item].percentual} onChange={(e) => atualizarChecklist(item, "percentual", e.target.value)} /><span>%</span></div> : <select id={`at-${item}`} value={checklist[item].estado} onChange={(e) => atualizarChecklist(item, "estado", e.target.value)}><option value="NORMAL">Normal</option><option value="COM_AVARIA">Com avaria</option><option value="NAO_VERIFICADO">Não verificado</option></select>}<input aria-label={`Observação sobre ${nome}`} placeholder="Observação opcional" value={checklist[item].observacao} onChange={(e) => atualizarChecklist(item, "observacao", e.target.value)} /></div>)}</fieldset></section>
+      <section><div className="section-action"><h2>4. Avarias</h2><button className="table-action" type="button" onClick={() => setAvarias((v) => [...v, { descricao: "", localizacao: "" }])}>Adicionar</button></div>{avarias.map((item, i) => <div className="dynamic-row" key={i}><input required placeholder="Local" value={item.localizacao} onChange={(e) => atualizarLista(setAvarias, i, "localizacao", e.target.value)} /><input required placeholder="Descrição" value={item.descricao} onChange={(e) => atualizarLista(setAvarias, i, "descricao", e.target.value)} /><button className="remove-action" type="button" onClick={() => setAvarias((v) => v.filter((_, p) => p !== i))}>Remover</button></div>)}</section>
+      <section><div className="section-action"><h2>5. Acessórios</h2><button className="table-action" type="button" onClick={() => setAcessorios((v) => [...v, { descricao: "" }])}>Adicionar</button></div>{acessorios.map((item, i) => <div className="dynamic-row accessory-row" key={i}><input required placeholder="Acessório entregue" value={item.descricao} onChange={(e) => atualizarLista(setAcessorios, i, "descricao", e.target.value)} /><button className="remove-action" type="button" onClick={() => setAcessorios((v) => v.filter((_, p) => p !== i))}>Remover</button></div>)}<label htmlFor="at-obs">Observações gerais</label><textarea id="at-obs" rows="3" value={form.observacoes} onChange={(e) => setForm((v) => ({ ...v, observacoes: e.target.value }))} /></section>
+      <div className="intake-submit"><p><strong>Ao confirmar:</strong> a entrada será registrada e a OS será gerada em “Aguardando orçamento”.</p><button className="button button-primary" disabled={salvando || carregando} type="submit">{salvando ? "Gerando atendimento..." : "Confirmar entrada e gerar OS"}</button></div>
+    </form>
   </section>;
 }

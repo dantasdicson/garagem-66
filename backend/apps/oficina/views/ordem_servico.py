@@ -22,7 +22,7 @@ class OrdemServicoViewSet(ModelViewSet):
 
     @action(detail=False, methods=("post",), url_path="abrir-atendimento")
     def abrir_atendimento(self, request):
-        entrada = AbrirAtendimentoSerializer(data=request.data)
+        entrada = AbrirAtendimentoSerializer(data=request.data, context={"request": request})
         entrada.is_valid(raise_exception=True)
         ordem = entrada.save()
         return Response(self.get_serializer(ordem).data, status=status.HTTP_201_CREATED)
