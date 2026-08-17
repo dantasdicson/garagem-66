@@ -13,6 +13,7 @@ function normalizarUsuario(usuario) {
 export function AuthProvider({ children }) {
   const [usuario, setUsuario] = useState(() => carregarSessao()?.usuario ?? null);
   const [carregando, setCarregando] = useState(() => Boolean(carregarSessao()?.access));
+  const [mensagemCarregamento, setMensagemCarregamento] = useState("Validando sua sessão...");
 
   const logout = useCallback(() => {
     limparSessao();
@@ -21,15 +22,55 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     if (!carregarSessao()?.access) return;
-    apiRequest("/usuarios/me/")
-      .then((perfil) => {
-        const usuarioAtualizado = normalizarUsuario(perfil);
-        const sessao = carregarSessao();
-        if (sessao) salvarSessao({ ...sessao, usuario: usuarioAtualizado });
-        setUsuario(usuarioAtualizado);
-      })
-      .catch(logout)
-      .finally(() => setCarregando(false));
+
+    let ativo = true;
+    let controller;
+    const pausas = [0, 2000, 4000, 6000];
+    const aguardar = (tempo) => new Promise((resolve) => setTimeout(resolve, tempo));
+    const erroDeConexao = (erro) => erro?.name === "AbortError" || erro instanceof TypeError;
+
+    async function validarSessao() {
+      try {
+        for (let tentativa = 0; tentativa < pausas.length; tentativa += 1) {
+          if (pausas[tentativa]) await aguardar(pausas[tentativa]);
+          if (!ativo) return;
+
+          if (tentativa > 0) setMensagemCarregamento("Servidor iniciando... tentando novamente.");
+          controller = new AbortController();
+          const limite = setTimeout(() => controller.abort(), 20000);
+
+          try {
+            const perfil = await apiRequest("/usuarios/me/", { signal: controller.signal });
+            const usuarioAtualizado = normalizarUsuario(perfil);
+            const sessao = carregarSessao();
+            if (sessao) salvarSessao({ ...sessao, usuario: usuarioAtualizado });
+            if (ativo) setUsuario(usuarioAtualizado);
+            return;
+          } catch (erro) {
+            const ultimaTentativa = tentativa === pausas.length - 1;
+            if (!erroDeConexao(erro) || ultimaTentativa) throw erro;
+            if (ativo) setMensagemCarregamento("Servidor iniciando... tentando novamente.");
+          } finally {
+            clearTimeout(limite);
+          }
+        }
+      } catch {
+        if (ativo) logout();
+      } finally {
+        if (ativo) setCarregando(false);
+      }
+    }
+
+    const avisoServidor = setTimeout(() => {
+      if (ativo) setMensagemCarregamento("Servidor iniciando... aguarde um momento.");
+    }, 1500);
+
+    validarSessao();
+    return () => {
+      ativo = false;
+      clearTimeout(avisoServidor);
+      controller?.abort();
+    };
   }, [logout]);
 
   const login = useCallback(async (username, password) => {
@@ -57,8 +98,8 @@ export function AuthProvider({ children }) {
   }, []);
 
   const valor = useMemo(
-    () => ({ usuario, autenticado: Boolean(usuario), carregando, login, logout, alterarSenha }),
-    [usuario, carregando, login, logout, alterarSenha],
+    () => ({ usuario, autenticado: Boolean(usuario), carregando, mensagemCarregamento, login, logout, alterarSenha }),
+    [usuario, carregando, mensagemCarregamento, login, logout, alterarSenha],
   );
   return <AuthContext.Provider value={valor}>{children}</AuthContext.Provider>;
 }
@@ -68,4 +109,3 @@ export function useAuth() {
   if (!contexto) throw new Error("useAuth deve ser usado dentro de AuthProvider.");
   return contexto;
 }
-
