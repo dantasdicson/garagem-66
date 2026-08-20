@@ -4,7 +4,7 @@ from django.utils import timezone
 
 from apps.usuarios.models import Usuario
 
-from ..models import RequisicaoPeca
+from ..models import ItemPeca, Peca, RequisicaoPeca
 
 
 @transaction.atomic
@@ -35,6 +35,25 @@ def decidir_requisicao_peca(*, requisicao, administrador, novo_status):
     requisicao_bloqueada = RequisicaoPeca.objects.select_for_update().get(pk=requisicao.pk)
     if requisicao_bloqueada.status != RequisicaoPeca.Status.PENDENTE:
         raise ValidationError({"status": "Esta requisição já foi decidida."})
+
+    if novo_status == RequisicaoPeca.Status.APROVADA:
+        peca_bloqueada = Peca.objects.select_for_update().get(pk=requisicao_bloqueada.peca_id)
+        if peca_bloqueada.quantidade_estoque < requisicao_bloqueada.quantidade:
+            raise ValidationError({
+                "quantidade": (
+                    f"Estoque insuficiente para aprovação. Disponível: "
+                    f"{peca_bloqueada.quantidade_estoque}."
+                )
+            })
+        ItemPeca.objects.create(
+            ordem_servico=requisicao_bloqueada.ordem_servico,
+            requisicao_peca=requisicao_bloqueada,
+            peca=peca_bloqueada,
+            quantidade=requisicao_bloqueada.quantidade,
+            valor_unitario=peca_bloqueada.valor_unitario,
+        )
+        peca_bloqueada.quantidade_estoque -= requisicao_bloqueada.quantidade
+        peca_bloqueada.save(update_fields=("quantidade_estoque",))
 
     requisicao_bloqueada.status = novo_status
     requisicao_bloqueada.decidida_por = administrador

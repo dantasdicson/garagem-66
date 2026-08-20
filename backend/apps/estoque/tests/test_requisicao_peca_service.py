@@ -45,7 +45,7 @@ class RequisicaoPecaServiceTests(TestCase):
         self.peca = Peca.objects.create(
             codigo="REQ-001",
             nome="Kit de relação",
-            quantidade_estoque=0,
+            quantidade_estoque=3,
         )
 
     def criar_requisicao(self):
@@ -85,6 +85,25 @@ class RequisicaoPecaServiceTests(TestCase):
         self.assertEqual(requisicao.status, RequisicaoPeca.Status.APROVADA)
         self.assertEqual(requisicao.decidida_por, self.administrador)
         self.assertIsNotNone(requisicao.decidida_em)
+        self.peca.refresh_from_db()
+        self.assertEqual(self.peca.quantidade_estoque, 2)
+        self.assertEqual(requisicao.itens.count(), 1)
+
+    def test_aprovacao_sem_estoque_e_impedida(self):
+        requisicao = self.criar_requisicao()
+        self.peca.quantidade_estoque = 0
+        self.peca.save(update_fields=("quantidade_estoque",))
+
+        with self.assertRaises(ValidationError):
+            decidir_requisicao_peca(
+                requisicao=requisicao,
+                administrador=self.administrador,
+                novo_status=RequisicaoPeca.Status.APROVADA,
+            )
+
+        requisicao.refresh_from_db()
+        self.assertEqual(requisicao.status, RequisicaoPeca.Status.PENDENTE)
+        self.assertFalse(requisicao.itens.exists())
 
     def test_requisicao_nao_pode_ser_decidida_duas_vezes(self):
         requisicao = self.criar_requisicao()

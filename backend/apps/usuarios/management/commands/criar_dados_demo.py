@@ -128,16 +128,34 @@ class Command(BaseCommand):
                 "cor": "Preta",
             },
         )
-        peca, _ = Peca.objects.update_or_create(
-            codigo="DEMO-FLT-001",
-            defaults={
-                "nome": "Filtro de óleo",
-                "descricao": "Peça fictícia para demonstração.",
-                "quantidade_estoque": 12,
-                "quantidade_minima": 3,
-                "valor_unitario": Decimal("44.90"),
-            },
-        )
+        catalogo_estoque = {
+            "DEMO-FLT-001": ("Filtro de óleo", "Filtro para revisão preventiva.", 12, 3, "44.90"),
+            "DEMO-OLE-010": ("Óleo 10W40", "Óleo semissintético para motocicletas.", 18, 8, "39.90"),
+            "DEMO-PST-020": ("Pastilha de freio dianteira", "Jogo de pastilhas para freio dianteiro.", 6, 4, "129.90"),
+            "DEMO-CAB-030": ("Cabo de embreagem", "Cabo de reposição reforçado.", 2, 3, "58.00"),
+            "DEMO-KIT-040": ("Kit de relação", "Coroa, corrente e pinhão.", 4, 2, "389.00"),
+            "DEMO-PNE-050": ("Pneu traseiro 160/60", "Pneu traseiro sport touring.", 0, 2, "749.00"),
+        }
+        pecas = {}
+        for codigo, (nome, descricao, quantidade, minima, valor) in catalogo_estoque.items():
+            peca_item, criada = Peca.objects.get_or_create(
+                codigo=codigo,
+                defaults={
+                    "nome": nome,
+                    "descricao": descricao,
+                    "quantidade_estoque": quantidade,
+                    "quantidade_minima": minima,
+                    "valor_unitario": Decimal(valor),
+                },
+            )
+            if not criada:
+                peca_item.nome = nome
+                peca_item.descricao = descricao
+                peca_item.quantidade_minima = minima
+                peca_item.valor_unitario = Decimal(valor)
+                peca_item.save(update_fields=("nome", "descricao", "quantidade_minima", "valor_unitario"))
+            pecas[codigo] = peca_item
+        peca = pecas["DEMO-FLT-001"]
         ordem, _ = OrdemServico.objects.update_or_create(
             numero="OS-2026-0066",
             defaults={
@@ -238,4 +256,24 @@ class Command(BaseCommand):
                 "decidida_por": None,
             },
         )
+        requisicoes_adicionais = [
+            (pecas["DEMO-OLE-010"], 3, RequisicaoPeca.Status.PENDENTE, "Óleo necessário para a revisão."),
+            (pecas["DEMO-PST-020"], 1, RequisicaoPeca.Status.PENDENTE, "Pastilhas com desgaste acima do limite."),
+            (pecas["DEMO-CAB-030"], 1, RequisicaoPeca.Status.PENDENTE, "Cabo apresentando desgaste no terminal."),
+            (pecas["DEMO-KIT-040"], 1, RequisicaoPeca.Status.RECUSADA, "Substituição preventiva não autorizada nesta etapa."),
+            (pecas["DEMO-PNE-050"], 1, RequisicaoPeca.Status.RECUSADA, "Item sem estoque; compra externa será avaliada."),
+        ]
+        for peca_requisitada, quantidade, status_requisicao, observacoes in requisicoes_adicionais:
+            RequisicaoPeca.objects.update_or_create(
+                ordem_servico=ordem_execucao,
+                mecanico=usuarios[Usuario.Tipo.MECANICO],
+                peca=peca_requisitada,
+                defaults={
+                    "quantidade": quantidade,
+                    "status": status_requisicao,
+                    "observacoes": observacoes,
+                    "decidida_em": timezone.now() if status_requisicao == RequisicaoPeca.Status.RECUSADA else None,
+                    "decidida_por": usuarios[Usuario.Tipo.ADMINISTRADOR] if status_requisicao == RequisicaoPeca.Status.RECUSADA else None,
+                },
+            )
         self.stdout.write(self.style.SUCCESS("Dados de demonstração criados/restaurados com sucesso."))
