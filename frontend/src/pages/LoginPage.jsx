@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
-
 import { useAuth } from "../contexts/AuthContext";
 
 export default function LoginPage() {
@@ -13,50 +12,35 @@ export default function LoginPage() {
   if (autenticado) return <Navigate to="/" replace />;
 
   async function handleSubmit(event) {
-    event.preventDefault();
-    setErro("");
-    setEnviando(true);
+    event.preventDefault(); setErro(""); setEnviando(true);
     try {
       const usuario = await login(form.username.trim(), form.password);
-      const destino = usuario.deve_alterar_senha ? "/alterar-senha" : location.state?.from?.pathname || "/";
-      navigate(destino, { replace: true });
-    } catch (error) {
-      setErro(error.message);
-    } finally {
-      setEnviando(false);
-    }
+      navigate(usuario.deve_alterar_senha ? "/alterar-senha" : location.state?.from?.pathname || "/", { replace: true });
+    } catch (error) { setErro(error.message); } finally { setEnviando(false); }
   }
 
   return (
     <main className="auth-page">
+      <section className="auth-showcase" aria-label="Garagem 66">
+        <span className="garage-logo garage-logo-large"><small>GARAGEM</small><strong>66</strong></span>
+        <h2>Sua moto.<br />Seu histórico.<br /><em>Tudo sob controle.</em></h2>
+        <p>Sistema de gerenciamento completo para oficinas de motos.</p>
+      </section>
       <section className="auth-card" aria-labelledby="login-title">
-        <div className="brand brand-dark"><span className="brand-mark">66</span><span>Garagem 66</span></div>
-        <p className="eyebrow">Oficina de motocicletas</p>
-        <h1 id="login-title">Acesse sua conta</h1>
-        <p className="muted">Entre com seu usuário e senha para acompanhar a oficina.</p>
+        <h1 id="login-title">Acesse sua conta</h1><p className="auth-subtitle">Garagem 66</p>
         <form onSubmit={handleSubmit}>
-          <label htmlFor="username">Usuário</label>
-          <input id="username" autoComplete="username" required value={form.username}
-            onChange={(event) => setForm((atual) => ({ ...atual, username: event.target.value }))} />
+          <label htmlFor="username">Usuário ou e-mail</label>
+          <input id="username" placeholder="Digite seu usuário ou e-mail" autoComplete="username" required value={form.username} onChange={(event) => setForm((atual) => ({ ...atual, username: event.target.value }))} />
           <label htmlFor="password">Senha</label>
-          <input id="password" type="password" autoComplete="current-password" required value={form.password}
-            onChange={(event) => setForm((atual) => ({ ...atual, password: event.target.value }))} />
+          <input id="password" placeholder="Digite sua senha" type="password" autoComplete="current-password" required value={form.password} onChange={(event) => setForm((atual) => ({ ...atual, password: event.target.value }))} />
           {erro ? <p className="form-error" role="alert">{erro}</p> : null}
-          <button className="button button-primary" disabled={enviando} type="submit">
-            {enviando ? "Entrando..." : "Entrar"}
-          </button>
+          <button className="button button-primary" disabled={enviando} type="submit">{enviando ? "Entrando..." : "Entrar"}</button>
         </form>
-        <aside className="demo-access" aria-label="Credenciais para demonstração">
-          <strong>Acesso para demonstração</strong>
-          <p>Senha para todos: <code>Garagem66@Demo</code></p>
-          <dl>
-            <div><dt>Administrador</dt><dd>admin.demo</dd></div>
-            <div><dt>Atendente</dt><dd>atendente.demo</dd></div>
-            <div><dt>Mecânico</dt><dd>mecanico.demo</dd></div>
-            <div><dt>Cliente</dt><dd>52998224725</dd></div>
-          </dl>
+        <aside className="demo-access"><strong>ⓘ Primeiro acesso</strong><p>Sua senha inicial é sua data de nascimento no formato DDMMAAAA.</p>
+          <details><summary>Acessos para demonstração</summary><p>Senha: <code>Garagem66@Demo</code></p><p>admin.demo · atendente.demo · mecanico.demo · 52998224725</p></details>
         </aside>
       </section>
     </main>
   );
 }
+
