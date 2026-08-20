@@ -168,6 +168,10 @@ th { border-bottom: 1px solid var(--g66-border); background: #f8f9fb; color: var
 .demo-access { border: 1px solid #d9dfe5; border-radius: 7px; background: #f5f6f7; }
 .demo-access details { margin-top: 8px; }
 .demo-access summary { cursor: pointer; color: #5a6672; }
+.demo-users { display: grid; gap: 8px; margin: 12px 0 0; }
+.demo-users div { display: flex; justify-content: space-between; gap: 16px; padding-top: 8px; border-top: 1px solid #dfe4e8; }
+.demo-users dt { color: #596570; }
+.demo-users dd { margin: 0; font-weight: 800; }
 
 @media (max-width: 1100px) { .dashboard-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 760px) {

@@ -97,9 +97,10 @@ VITE_API_URL=https://SUA-API.onrender.com/api
 Contas demonstrativas (senha comum `Garagem66@Demo`):
 
 ```text
-Administrador: admin.demo
-Atendente: atendente.demo
-Mecânico: mecanico.demo
+Administrador Luiz Henrique: luiz.henrique
+Atendente Fabio: fabio
+Mecânico Danrley: danrley
+Cliente Danilo Jota: 52998224725
 Cliente: 52998224725
 ```
 

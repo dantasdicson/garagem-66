@@ -38,7 +38,9 @@ export default function LoginPage() {
           <button className="button button-primary" disabled={enviando} type="submit">{enviando ? "Entrando..." : "Entrar"}</button>
         </form>
         <aside className="demo-access"><strong>ⓘ Primeiro acesso</strong><p>Sua senha inicial é sua data de nascimento no formato DDMMAAAA.</p>
-          <details><summary>Acessos para demonstração</summary><p>Senha: <code>Garagem66@Demo</code></p><p>admin.demo · atendente.demo · mecanico.demo · 52998224725</p></details>
+          <details><summary>Acessos para demonstração</summary><p>Senha: <code>Garagem66@Demo</code></p>
+            <dl className="demo-users"><div><dt>Administrador — Luiz Henrique</dt><dd>luiz.henrique</dd></div><div><dt>Atendente — Fabio</dt><dd>fabio</dd></div><div><dt>Mecânico — Danrley</dt><dd>danrley</dd></div><div><dt>Cliente — Danilo Jota</dt><dd>52998224725</dd></div></dl>
+          </details>
         </aside>
       </section>
     </main>

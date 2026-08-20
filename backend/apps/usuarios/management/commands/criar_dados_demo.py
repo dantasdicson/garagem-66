@@ -6,10 +6,14 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.utils import timezone
 
-from apps.estoque.models import Peca
+from apps.estoque.models import Peca, RequisicaoPeca
 from apps.oficina.models import (
+    Acessorio,
+    Avaria,
     Cliente,
+    EntradaVeiculo,
     HistoricoStatusOrdem,
+    ItemChecklistEntrada,
     ItemOrcamentoPeca,
     ItemOrcamentoServico,
     ModeloMotocicleta,
@@ -69,11 +73,19 @@ class Command(BaseCommand):
                         defaults={"categoria": categoria, "ativo": True, "fonte_url": fontes[marca]},
                     )
         usuarios = {}
+        migracoes_login = {
+            "admin.demo": "luiz.henrique",
+            "atendente.demo": "fabio",
+            "mecanico.demo": "danrley",
+        }
+        for login_antigo, login_novo in migracoes_login.items():
+            Usuario.objects.filter(username=login_antigo).exclude(username=login_novo).update(username=login_novo)
+
         configuracoes = {
-            "admin.demo": ("Administrador", "Demo", Usuario.Tipo.ADMINISTRADOR),
-            "atendente.demo": ("Atendente", "Demo", Usuario.Tipo.ATENDENTE),
-            "mecanico.demo": ("Mecânico", "Demo", Usuario.Tipo.MECANICO),
-            "52998224725": ("Marina", "Oliveira", Usuario.Tipo.CLIENTE),
+            "luiz.henrique": ("Luiz", "Henrique", Usuario.Tipo.ADMINISTRADOR),
+            "fabio": ("Fabio", "Almeida", Usuario.Tipo.ATENDENTE),
+            "danrley": ("Danrley", "Santos", Usuario.Tipo.MECANICO),
+            "52998224725": ("Danilo", "Jota", Usuario.Tipo.CLIENTE),
         }
         for username, (nome, sobrenome, tipo) in configuracoes.items():
             eh_administrador = tipo == Usuario.Tipo.ADMINISTRADOR
@@ -98,11 +110,11 @@ class Command(BaseCommand):
             cpf="52998224725",
             defaults={
                 "usuario": usuarios[Usuario.Tipo.CLIENTE],
-                "nome": "Marina Oliveira",
+                "nome": "Danilo Jota",
                 "data_nascimento": date(1990, 2, 1),
                 "email": "52998224725@demo.garagem66.local",
-                "telefone": "(11) 99999-0066",
-                "endereco": "Rua da Motocicleta, 66 - São Paulo/SP",
+                "telefone": "(84) 99966-0066",
+                "endereco": "Rua das Dunas, 66 - Natal/RN",
             },
         )
         motocicleta, _ = Motocicleta.objects.update_or_create(
@@ -110,10 +122,10 @@ class Command(BaseCommand):
             defaults={
                 "cliente": cliente,
                 "marca": "Honda",
-                "modelo": "CB 500X",
+                "modelo": "NX 500",
                 "ano": 2024,
                 "chassi": "9C2DEMO6600000001",
-                "cor": "Vermelha",
+                "cor": "Preta",
             },
         )
         peca, _ = Peca.objects.update_or_create(
@@ -127,17 +139,49 @@ class Command(BaseCommand):
             },
         )
         ordem, _ = OrdemServico.objects.update_or_create(
-            numero="OS-DEMO-001",
+            numero="OS-2026-0066",
             defaults={
                 "motocicleta": motocicleta,
                 "cliente": cliente,
                 "mecanico": usuarios[Usuario.Tipo.MECANICO],
                 "tipo_manutencao": OrdemServico.TipoManutencao.PREVENTIVA,
-                "descricao_problema": "Revisão preventiva para apresentação do sistema.",
+                "descricao_problema": "Revisão de 12.000 km, troca de óleo e inspeção do sistema de freios.",
                 "status": OrdemServico.Status.AGUARDANDO_APROVACAO,
                 "concluida_em": None,
             },
         )
+        entrada, _ = EntradaVeiculo.objects.update_or_create(
+            ordem_servico=ordem,
+            defaults={
+                "quilometragem": 12184,
+                "nivel_combustivel": "1/2 - Médio (50%)",
+                "motivo_entrada": "Revisão periódica de 12.000 km.",
+                "observacoes": "Motocicleta recebida por Fabio e encaminhada ao mecânico Danrley.",
+            },
+        )
+        itens_pneu = {
+            ItemChecklistEntrada.Item.PNEU_DIANTEIRO,
+            ItemChecklistEntrada.Item.PNEU_TRASEIRO,
+        }
+        for item in ItemChecklistEntrada.Item.values:
+            ItemChecklistEntrada.objects.update_or_create(
+                entrada_veiculo=entrada,
+                item=item,
+                defaults={
+                    "percentual": 75 if item == ItemChecklistEntrada.Item.PNEU_DIANTEIRO else (
+                        70 if item == ItemChecklistEntrada.Item.PNEU_TRASEIRO else None
+                    ),
+                    "estado": "" if item in itens_pneu else ItemChecklistEntrada.Estado.NORMAL,
+                    "observacao": "Verificado no recebimento.",
+                },
+            )
+        Avaria.objects.update_or_create(
+            entrada_veiculo=entrada,
+            localizacao="Protetor lateral direito",
+            defaults={"descricao": "Risco superficial preexistente, registrado na entrada."},
+        )
+        Acessorio.objects.get_or_create(entrada_veiculo=entrada, descricao="Protetor de motor")
+
         orcamento, _ = Orcamento.objects.update_or_create(
             ordem_servico=ordem,
             defaults={
@@ -168,6 +212,30 @@ class Command(BaseCommand):
             defaults={
                 "responsavel": usuarios[Usuario.Tipo.ATENDENTE],
                 "observacao": "Orçamento demonstrativo emitido.",
+            },
+        )
+        ordem_execucao, _ = OrdemServico.objects.update_or_create(
+            numero="OS-2026-0067",
+            defaults={
+                "motocicleta": motocicleta,
+                "cliente": cliente,
+                "mecanico": usuarios[Usuario.Tipo.MECANICO],
+                "tipo_manutencao": OrdemServico.TipoManutencao.CORRETIVA,
+                "descricao_problema": "Ruído no freio dianteiro identificado durante inspeção.",
+                "status": OrdemServico.Status.AGUARDANDO_PECAS,
+                "concluida_em": None,
+            },
+        )
+        RequisicaoPeca.objects.update_or_create(
+            ordem_servico=ordem_execucao,
+            mecanico=usuarios[Usuario.Tipo.MECANICO],
+            peca=peca,
+            defaults={
+                "quantidade": 1,
+                "status": RequisicaoPeca.Status.PENDENTE,
+                "observacoes": "Solicitação de Danrley para continuidade do serviço.",
+                "decidida_em": None,
+                "decidida_por": None,
             },
         )
         self.stdout.write(self.style.SUCCESS("Dados de demonstração criados/restaurados com sucesso."))
