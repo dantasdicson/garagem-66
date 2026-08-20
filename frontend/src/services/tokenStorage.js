@@ -1,19 +1,25 @@
 const STORAGE_KEY = "garagem66.auth.v1";
 
+function removerSessaoPersistenteAntiga() {
+  localStorage.removeItem(STORAGE_KEY);
+}
+
 export function carregarSessao() {
+  removerSessaoPersistenteAntiga();
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) ?? null;
+    return JSON.parse(sessionStorage.getItem(STORAGE_KEY)) ?? null;
   } catch {
-    localStorage.removeItem(STORAGE_KEY);
+    sessionStorage.removeItem(STORAGE_KEY);
     return null;
   }
 }
 
 export function salvarSessao(sessao) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(sessao));
+  removerSessaoPersistenteAntiga();
+  sessionStorage.setItem(STORAGE_KEY, JSON.stringify(sessao));
 }
 
 export function limparSessao() {
+  sessionStorage.removeItem(STORAGE_KEY);
   localStorage.removeItem(STORAGE_KEY);
 }
-
