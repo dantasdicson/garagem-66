@@ -105,6 +105,21 @@ class RequisicaoPecaServiceTests(TestCase):
         self.assertEqual(requisicao.status, RequisicaoPeca.Status.PENDENTE)
         self.assertFalse(requisicao.itens.exists())
 
+    def test_mecanico_nao_pode_aprovar_requisicao(self):
+        requisicao = self.criar_requisicao()
+
+        with self.assertRaises(ValidationError):
+            decidir_requisicao_peca(
+                requisicao=requisicao,
+                administrador=self.mecanico,
+                novo_status=RequisicaoPeca.Status.APROVADA,
+            )
+
+        requisicao.refresh_from_db()
+        self.peca.refresh_from_db()
+        self.assertEqual(requisicao.status, RequisicaoPeca.Status.PENDENTE)
+        self.assertEqual(self.peca.quantidade_estoque, 3)
+
     def test_requisicao_nao_pode_ser_decidida_duas_vezes(self):
         requisicao = self.criar_requisicao()
         decidir_requisicao_peca(
