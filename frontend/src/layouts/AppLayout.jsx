@@ -4,8 +4,8 @@ import { useAuth } from "../contexts/AuthContext";
 import garagem66Logo from "../assets/garagem-66-logo.png";
 
 const menusPorPerfil = {
-  ADMINISTRADOR: ["clientes", "motocicletas", "ordens", "orcamentos", "estoque", "usuarios"],
-  ATENDENTE: ["clientes", "motocicletas", "ordens", "orcamentos", "estoque"],
+  ADMINISTRADOR: ["clientes", "motocicletas", "ordens", "orcamentos", "estoque", "requisicoes", "usuarios"],
+  ATENDENTE: ["clientes", "motocicletas", "ordens", "orcamentos", "estoque", "requisicoes"],
   MECANICO: ["minhas-ordens", "requisicoes", "estoque"],
   CLIENTE: ["minhas-motos", "minhas-ordens", "orcamentos", "historico"],
 };

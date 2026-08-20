@@ -11,6 +11,8 @@ import MotocicletasPage from "./pages/MotocicletasPage";
 import OrdensServicoPage from "./pages/OrdensServicoPage";
 import OrcamentosPage from "./pages/OrcamentosPage";
 import EntradasVeiculoPage from "./pages/EntradasVeiculoPage";
+import EstoquePage from "./pages/EstoquePage";
+import RequisicoesPecasPage from "./pages/RequisicoesPecasPage";
 
 export default function App() {
   return (
@@ -27,6 +29,8 @@ export default function App() {
           <Route path="/minhas-ordens" element={<OrdensServicoPage />} />
           <Route path="/orcamentos" element={<OrcamentosPage />} />
           <Route path="/novo-atendimento" element={<EntradasVeiculoPage />} />
+          <Route path="/estoque" element={<EstoquePage />} />
+          <Route path="/requisicoes" element={<RequisicoesPecasPage />} />
           <Route path="/entradas" element={<Navigate to="/novo-atendimento" replace />} />
           <Route path="/:modulo" element={<ModuloPage />} />
         </Route>
