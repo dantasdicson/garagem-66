@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from "react-router-dom";
 
 import { useAuth } from "../contexts/AuthContext";
+import garagem66Logo from "../assets/garagem-66-logo.png";
 
 const menusPorPerfil = {
   ADMINISTRADOR: ["clientes", "motocicletas", "ordens", "orcamentos", "estoque", "usuarios"],
@@ -20,7 +21,7 @@ export default function AppLayout() {
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <NavLink to="/" className="brand" aria-label="Ir para o painel"><span className="garage-logo"><small>GARAGEM</small><strong>66</strong></span></NavLink>
+        <NavLink to="/" className="brand" aria-label="Ir para o painel"><img className="garage-logo-image" src={garagem66Logo} alt="Garagem 66" /></NavLink>
         <p className="brand-slogan">Sua moto.<br />Seu histórico.<br /><em>Tudo sob controle.</em></p>
         <nav aria-label="Navegação principal">
           <NavLink to="/" end><span className="menu-icon">⌁</span>{usuario.tipo === "CLIENTE" ? "Início" : "Dashboard"}</NavLink>
@@ -36,4 +37,3 @@ export default function AppLayout() {
     </div>
   );
 }
-

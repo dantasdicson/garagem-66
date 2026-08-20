@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import garagem66Logo from "../assets/garagem-66-logo.png";
 
 export default function LoginPage() {
   const { autenticado, login } = useAuth();
@@ -22,7 +23,7 @@ export default function LoginPage() {
   return (
     <main className="auth-page">
       <section className="auth-showcase" aria-label="Garagem 66">
-        <span className="garage-logo garage-logo-large"><small>GARAGEM</small><strong>66</strong></span>
+        <img className="garage-logo-image garage-logo-image-large" src={garagem66Logo} alt="Garagem 66" />
         <h2>Sua moto.<br />Seu histórico.<br /><em>Tudo sob controle.</em></h2>
         <p>Sistema de gerenciamento completo para oficinas de motos.</p>
       </section>
@@ -43,4 +44,3 @@ export default function LoginPage() {
     </main>
   );
 }
-

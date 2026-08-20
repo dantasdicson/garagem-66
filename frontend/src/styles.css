@@ -84,6 +84,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--g66-red); box-sh
 .garage-logo strong { font-family: Impact, "Arial Black", sans-serif; font-size: 54px; letter-spacing: -2px; }
 .garage-logo-large { width: 140px; height: 142px; }
 .garage-logo-large strong { font-size: 72px; }
+.garage-logo-image { display: block; width: 138px; height: 138px; object-fit: contain; filter: drop-shadow(0 8px 14px #0008); }
+.garage-logo-image-large { width: 220px; height: 220px; }
 
 .app-shell { grid-template-columns: 248px minmax(0, 1fr); }
 .sidebar { position: sticky; top: 0; height: 100vh; padding: 26px 16px 18px; background: linear-gradient(155deg, #14212a, #0d171e); }
