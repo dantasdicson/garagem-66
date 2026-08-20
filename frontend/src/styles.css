@@ -138,6 +138,10 @@ input:focus, select:focus, textarea:focus { border-color: var(--g66-red); box-sh
 .metric-card { display: flex; gap: 18px; align-items: center; min-height: 138px; padding: 22px; }
 .metric-card::before { display: none; }
 .metric-card > div { display: grid; gap: 5px; }
+.metric-link { position: relative; cursor: pointer; transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease; }
+.metric-link:hover, .metric-link:focus-visible { border-color: #c6ced8; box-shadow: 0 10px 25px #1d2d3d16; transform: translateY(-3px); }
+.metric-link:focus-visible { outline: 3px solid #d30d1830; outline-offset: 2px; }
+.metric-arrow { position: absolute; right: 15px; bottom: 13px; color: var(--g66-red); font-weight: 900; }
 .metric-card strong { font-size: 1.9rem; }
 .metric-icon { display: grid; width: 64px; height: 64px; flex: 0 0 auto; place-items: center; border-radius: 50%; color: #d9101b; background: #fee8e9; font-size: 1.9rem; }
 .tone-orange .metric-icon { color: #d97309; background: #fff0df; }
