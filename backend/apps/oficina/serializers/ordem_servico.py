@@ -74,6 +74,13 @@ class AbrirAtendimentoSerializer(serializers.Serializer):
 
 
 class OrdemServicoSerializer(serializers.ModelSerializer):
+    cliente_nome = serializers.CharField(source="cliente.nome", read_only=True)
+    motocicleta_descricao = serializers.SerializerMethodField()
+    mecanico_nome = serializers.CharField(source="mecanico.get_full_name", read_only=True)
+
+    def get_motocicleta_descricao(self, obj):
+        return str(obj.motocicleta)
+
     class Meta:
         model = OrdemServico
         fields = "__all__"

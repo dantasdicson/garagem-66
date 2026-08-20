@@ -13,6 +13,7 @@ import OrcamentosPage from "./pages/OrcamentosPage";
 import EntradasVeiculoPage from "./pages/EntradasVeiculoPage";
 import EstoquePage from "./pages/EstoquePage";
 import RequisicoesPecasPage from "./pages/RequisicoesPecasPage";
+import OrdemServicoDetalhePage from "./pages/OrdemServicoDetalhePage";
 
 export default function App() {
   return (
@@ -26,7 +27,9 @@ export default function App() {
           <Route path="/motocicletas" element={<MotocicletasPage />} />
           <Route path="/minhas-motos" element={<MotocicletasPage />} />
           <Route path="/ordens" element={<OrdensServicoPage />} />
+          <Route path="/ordens/:ordemId" element={<OrdemServicoDetalhePage />} />
           <Route path="/minhas-ordens" element={<OrdensServicoPage />} />
+          <Route path="/minhas-ordens/:ordemId" element={<OrdemServicoDetalhePage />} />
           <Route path="/orcamentos" element={<OrcamentosPage />} />
           <Route path="/novo-atendimento" element={<EntradasVeiculoPage />} />
           <Route path="/estoque" element={<EstoquePage />} />

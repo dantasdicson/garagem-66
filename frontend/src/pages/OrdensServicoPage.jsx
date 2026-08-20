@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import { apiRequest } from "../api/client";
 import { useAuth } from "../contexts/AuthContext";
@@ -46,7 +46,6 @@ export default function OrdensServicoPage() {
   const [carregando, setCarregando] = useState(true);
   const [salvando, setSalvando] = useState(false);
   const [acaoEmAndamento, setAcaoEmAndamento] = useState("");
-  const [ordemSelecionadaId, setOrdemSelecionadaId] = useState(null);
   const [erro, setErro] = useState("");
 
   const motosPorId = useMemo(
@@ -56,10 +55,6 @@ export default function OrdensServicoPage() {
   const mecanicosPorId = useMemo(
     () => new Map(mecanicos.map((mecanico) => [mecanico.id, mecanico])),
     [mecanicos],
-  );
-  const ordemSelecionada = useMemo(
-    () => ordens.find((ordem) => ordem.id === ordemSelecionadaId) ?? null,
-    [ordens, ordemSelecionadaId],
   );
 
   const carregar = useCallback(async () => {
@@ -157,7 +152,7 @@ export default function OrdensServicoPage() {
             <tbody>{ordens.length ? ordens.map((ordem) => {
               const moto = motosPorId.get(ordem.motocicleta);
               const mecanico = mecanicosPorId.get(ordem.mecanico);
-              return <tr key={ordem.id} className={ordemSelecionadaId === ordem.id ? "selected-row" : ""}><td><button className="order-link" type="button" onClick={() => setOrdemSelecionadaId(ordem.id)}>{ordem.numero}</button><small>{ordem.tipo_manutencao === "PREVENTIVA" ? "Preventiva" : "Corretiva"}</small></td>
+              return <tr key={ordem.id}><td><Link className="order-link" to={`${usuario.tipo === "CLIENTE" ? "/minhas-ordens" : "/ordens"}/${ordem.id}`}>{ordem.numero}</Link><small>{ordem.tipo_manutencao === "PREVENTIVA" ? "Preventiva" : "Corretiva"}</small></td>
                 <td>{moto ? `${moto.marca} ${moto.modelo}` : `Motocicleta #${ordem.motocicleta}`}<small>{moto?.placa}</small></td>
                 <td><span className={`status-badge status-${ordem.status.toLowerCase()}`}>{nomesStatus[ordem.status] || ordem.status}</span></td>
                 <td>{mecanico ? `${mecanico.first_name} ${mecanico.last_name}` : ordem.mecanico ? `Usuário #${ordem.mecanico}` : "Não atribuído"}</td>
@@ -175,22 +170,6 @@ export default function OrdensServicoPage() {
           <button className="button button-primary" disabled={salvando} type="submit">{salvando ? "Abrindo..." : "Abrir ordem de serviço"}</button>
         </form> : null}
       </div>
-      {ordemSelecionada ? <article className="order-detail" aria-live="polite">
-        <div className="order-detail-heading"><div><p className="eyebrow">Detalhes da ordem</p><h2>{ordemSelecionada.numero}</h2></div><button className="table-action" type="button" onClick={() => setOrdemSelecionadaId(null)}>Fechar</button></div>
-        <div className="order-detail-grid">
-          <div><small>Status</small><strong>{nomesStatus[ordemSelecionada.status] || ordemSelecionada.status}</strong></div>
-          <div><small>Tipo de manutenção</small><strong>{ordemSelecionada.tipo_manutencao === "PREVENTIVA" ? "Preventiva" : "Corretiva"}</strong></div>
-          <div><small>Motocicleta</small><strong>{(() => { const moto = motosPorId.get(ordemSelecionada.motocicleta); return moto ? `${moto.marca} ${moto.modelo} — ${moto.placa}` : `Motocicleta #${ordemSelecionada.motocicleta}`; })()}</strong></div>
-          <div><small>Mecânico responsável</small><strong>{(() => { const mecanico = mecanicosPorId.get(ordemSelecionada.mecanico); return mecanico ? `${mecanico.first_name} ${mecanico.last_name}` : ordemSelecionada.mecanico ? `Usuário #${ordemSelecionada.mecanico}` : "Não atribuído"; })()}</strong></div>
-          <div><small>Data de abertura</small><strong>{new Date(ordemSelecionada.aberta_em).toLocaleString("pt-BR")}</strong></div>
-          <div><small>Última atualização</small><strong>{new Date(ordemSelecionada.atualizada_em).toLocaleString("pt-BR")}</strong></div>
-        </div>
-        <div className="order-problem"><small>Problema relatado / serviço solicitado</small><p>{ordemSelecionada.descricao_problema}</p></div>
-        <div className="order-detail-actions">
-          <button className="button button-secondary" type="button" onClick={() => navigate("/orcamentos")}>Ver orçamento relacionado</button>
-          {acoesDisponiveis(ordemSelecionada, usuario.tipo).map(([acao, rotulo]) => <button key={acao} className="button button-primary" type="button" disabled={Boolean(acaoEmAndamento)} onClick={() => executarAcao(ordemSelecionada, acao)}>{rotulo}</button>)}
-        </div>
-      </article> : null}
     </section>
   );
 }
