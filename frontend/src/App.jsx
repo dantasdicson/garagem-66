@@ -14,6 +14,7 @@ import EntradasVeiculoPage from "./pages/EntradasVeiculoPage";
 import EstoquePage from "./pages/EstoquePage";
 import RequisicoesPecasPage from "./pages/RequisicoesPecasPage";
 import OrdemServicoDetalhePage from "./pages/OrdemServicoDetalhePage";
+import UsuariosPage from "./pages/UsuariosPage";
 
 export default function App() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
           <Route path="/novo-atendimento" element={<EntradasVeiculoPage />} />
           <Route path="/estoque" element={<EstoquePage />} />
           <Route path="/requisicoes" element={<RequisicoesPecasPage />} />
+          <Route path="/usuarios" element={<UsuariosPage />} />
           <Route path="/entradas" element={<Navigate to="/novo-atendimento" replace />} />
           <Route path="/:modulo" element={<ModuloPage />} />
         </Route>
