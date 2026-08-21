@@ -6,7 +6,7 @@
   <style>
     @page { size: A4; margin: 15mm 14mm 16mm; }
     * { box-sizing: border-box; }
-    body { margin: 0; color: #15202b; background: #fff; font: 10.4pt/1.48 "Segoe UI", Arial, sans-serif; }
+    body { margin: 0; color: #15202b; background: #e9eef1; font: 10.4pt/1.48 "Segoe UI", Arial, sans-serif; }
     h1, h2, h3, p { margin-top: 0; }
     h1 { font-size: 30pt; line-height: 1.05; color: #0f1f2a; margin-bottom: 8mm; }
     h2 { font-size: 19pt; color: #0f1f2a; border-bottom: 2px solid #df0712; padding-bottom: 2mm; margin: 0 0 5mm; }
@@ -15,9 +15,9 @@
     ul, ol { margin: 2mm 0 4mm; padding-left: 6mm; }
     li { margin: 1.2mm 0; }
     code { font: 9.5pt Consolas, monospace; background: #edf1f4; padding: 1mm 1.5mm; border-radius: 2mm; }
-    .page { break-after: page; min-height: 258mm; position: relative; }
+    .page { break-after: page; width: 210mm; min-height: 297mm; margin: 8mm auto; padding: 15mm 14mm 16mm; position: relative; background: #fff; box-shadow: 0 3mm 10mm rgba(15,31,42,.12); overflow: hidden; }
     .page:last-child { break-after: auto; }
-    .cover { background: linear-gradient(135deg, #0d1b25 0%, #152a38 63%, #8f0008 100%); color: #fff; margin: -15mm -14mm -16mm; min-height: 0; height: 297mm; padding: 27mm 22mm; overflow: hidden; }
+    .cover { background: linear-gradient(135deg, #0d1b25 0%, #152a38 63%, #8f0008 100%); color: #fff; height: 297mm; padding: 27mm 22mm; overflow: hidden; }
     .cover::after { content: "66"; position: absolute; right: 8mm; bottom: -21mm; font: 900 135pt/1 Arial; color: rgba(255,255,255,.055); }
     .cover img { width: 43mm; height: 43mm; object-fit: contain; margin-bottom: 18mm; }
     .cover h1 { color: #fff; font-size: 34pt; max-width: 145mm; }
@@ -48,11 +48,53 @@
     .checklist li { break-inside: avoid; list-style: "☐  "; padding-left: 1mm; }
     .footer { position: absolute; bottom: 0; left: 0; right: 0; border-top: 1px solid #d8e0e5; padding-top: 2mm; color: #6d7d87; font-size: 8pt; display: flex; justify-content: space-between; }
     .small { font-size: 8.8pt; color: #5c6c76; }
+    .tech-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; margin: 4mm 0; }
+    .tech { padding: 3.5mm; border-radius: 2.5mm; background: #132735; color: #fff; break-inside: avoid; }
+    .tech strong { display: block; color: #ff535b; margin-bottom: 1mm; }
+    @media print {
+      body { background: #fff; font-size: 8.8pt; line-height: 1.32; }
+      h1 { font-size: 27pt; }
+      h2 { font-size: 16pt; margin-bottom: 3mm; }
+      h3 { font-size: 10.5pt; margin: 3mm 0 1.5mm; }
+      p { margin-bottom: 2mm; }
+      ul, ol { margin: 1mm 0 2.5mm; }
+      li { margin: .7mm 0; }
+      .page { width: auto; min-height: 266mm; margin: 0; padding: 0; box-shadow: none; overflow: visible; }
+      .cover { width: auto; min-height: 0; height: 297mm; margin: -15mm -14mm -16mm; padding: 27mm 22mm; overflow: hidden; }
+      .lead { font-size: 10.5pt; }
+      .card { padding: 2.5mm 3mm; }
+      .credentials { margin: 2mm 0; font-size: 8.3pt; }
+      .credentials th, .credentials td { padding: 1.6mm 2mm; }
+      .matrix { display: block; max-height: 86mm; width: auto; max-width: 100%; margin: 2.5mm auto 0; object-fit: contain; }
+      .tech-grid { gap: 2mm; margin: 2.5mm 0; }
+      .tech { padding: 2.3mm; font-size: 8pt; }
+      .callout { padding: 2.5mm 3.5mm; margin: 3mm 0; }
+      .checklist { font-size: 8.3pt; }
+    }
+    @media screen and (max-width: 900px) {
+      html, body { max-width: 100%; overflow-x: hidden; }
+      body { font-size: 10pt; }
+      .page { width: calc(100% - 20px); min-height: 0; margin: 10px; padding: 24px 18px 34px; overflow: visible; }
+      .cover { min-height: calc(100vh - 20px); height: auto; padding: 38px 24px; }
+      .cover img { width: 112px; height: 112px; margin-bottom: 32px; }
+      .cover h1 { font-size: 29pt; }
+      .cover h1, .cover .subtitle { width: 100%; max-width: 100%; overflow-wrap: anywhere; }
+      .cover .subtitle { font-size: 13pt; }
+      .cover .meta { position: relative; left: auto; bottom: auto; margin-top: 70px; }
+      .grid, .tech-grid { grid-template-columns: 1fr; }
+      .flow { flex-direction: column; }
+      .flow i { transform: rotate(90deg); }
+      .credentials { font-size: 8pt; }
+      .credentials th, .credentials td { padding: 6px 5px; overflow-wrap: anywhere; }
+      code { font-size: 7.5pt; padding: 2px; }
+      .checklist { columns: 1; }
+      .footer { position: relative; margin-top: 28px; }
+    }
   </style>
 </head>
 <body>
   <section class="page cover">
-    <img src="../frontend/src/assets/garagem-66-logo.png" alt="Logotipo Garagem 66">
+    <img src="https://raw.githubusercontent.com/dantasdicson/garagem-66/master/frontend/src/assets/garagem-66-logo.png" alt="Logotipo Garagem 66">
     <div class="tag">Projeto Multidisciplinar III</div>
     <h1>Guia de Avaliação e Navegação</h1>
     <p class="subtitle">Uma introdução prática ao sistema Garagem 66, seus atores, responsabilidades e principais fluxos de atendimento.</p>
@@ -72,6 +114,10 @@
       <div class="card"><strong>Execução</strong><p>Atribuição ao mecânico, mudanças de status e histórico da OS.</p></div>
       <div class="card"><strong>Estoque</strong><p>Cadastro de peças, requisições, aprovação e baixa automática.</p></div>
     </div>
+
+    <h3>Usabilidade em diferentes dispositivos</h3>
+    <p>A experiência foi pensada para funcionar tanto em <strong>notebooks e computadores</strong> quanto em <strong>smartphones</strong>. O layout reorganiza menus, cartões, tabelas e formulários conforme o espaço disponível, preservando legibilidade, áreas de toque e acesso às ações principais.</p>
+    <p>Esse cuidado reforça um objetivo central do projeto: permitir que administração, recepção, mecânico e cliente utilizem o sistema com clareza no dispositivo mais conveniente para cada situação.</p>
 
     <h3>Fluxo central</h3>
     <div class="flow"><span>Recepção abre a OS</span><i>›</i><span>Orçamento é emitido</span><i>›</i><span>Cliente decide</span><i>›</i><span>Mecânico executa</span><i>›</i><span>Admin controla peças</span></div>
@@ -102,51 +148,20 @@
     </div>
     <h3>Regra de navegação</h3>
     <p>O menu lateral muda de acordo com o perfil. Isso é intencional: cada ator visualiza somente as áreas relacionadas à sua responsabilidade. O nome e a função do usuário conectado aparecem no canto inferior esquerdo.</p>
-    <img class="matrix" src="../matriz-funcoes-atores-v2.png" alt="Matriz resumida de funcionalidades por ator">
+    <img class="matrix" src="https://raw.githubusercontent.com/dantasdicson/garagem-66/master/matriz-funcoes-atores-v2.png" alt="Matriz resumida de funcionalidades por ator">
     <div class="footer"><span>Garagem 66</span><span>Atores e credenciais fictícias</span></div>
   </section>
 
   <section class="page">
-    <p class="eyebrow">03 — Roteiro principal</p>
-    <h2>Teste ponta a ponta recomendado</h2>
-    <p class="lead">O roteiro abaixo permite que o avaliador experimente a colaboração entre os quatro perfis sem precisar conhecer previamente a estrutura do sistema.</p>
-    <div class="step"><div class="step-number">1</div><div><h3>Administrador: reconheça o ambiente</h3><p>Entre como Luiz. Consulte o Dashboard, <strong>Clientes / Colaboradores</strong>, Ordens, Estoque e Requisições. No campo “Exibir”, selecione “Colaboradores” e confirme Luiz, Fabio e Danrley.</p><p class="expected">Esperado: indicadores gerais e equipe ativa aparecem com dados reais da API.</p></div></div>
-    <div class="step"><div class="step-number">2</div><div><h3>Atendente: inicie o atendimento</h3><p>Saia e entre como Fabio. Em Clientes, consulte Danilo Jota. Em Motocicletas, confirme que a motocicleta está vinculada ao proprietário. Abra <strong>Ordens → Novo atendimento</strong>, informe o problema e prossiga.</p><p class="expected">Esperado: uma OS é criada e passa a compor o histórico do cliente.</p></div></div>
-    <div class="step"><div class="step-number">3</div><div><h3>Equipe: prepare o orçamento</h3><p>Acesse Orçamentos, selecione uma OS elegível, inclua serviços e peças com quantidade e valor e emita a proposta. O orçamento deve ficar como <strong>Aguardando aprovação</strong>.</p><p class="expected">Esperado: o total é calculado e o orçamento fica disponível para o cliente.</p></div></div>
-    <div class="step"><div class="step-number">4</div><div><h3>Cliente: tome a decisão</h3><p>Saia e entre como Danilo. Abra Orçamentos, clique no orçamento pendente, confira serviços, peças e total e escolha <strong>Aprovar orçamento</strong>.</p><p class="expected">Esperado: a OS é liberada para execução e o histórico registra a decisão.</p></div></div>
-    <div class="step"><div class="step-number">5</div><div><h3>Administrador e mecânico: confira a notificação</h3><p>Entre novamente como Luiz e depois como Danrley. Abra o sino do cabeçalho.</p><p class="expected">Esperado: os dois perfis recebem a atualização de que o orçamento foi aprovado.</p></div></div>
-    <div class="footer"><span>Garagem 66</span><span>Roteiro principal — parte 1</span></div>
-  </section>
-
-  <section class="page">
-    <p class="eyebrow">04 — Continuação do roteiro</p>
-    <h2>Da execução à baixa do estoque</h2>
-    <div class="step"><div class="step-number">6</div><div><h3>Mecânico: execute e solicite peças</h3><p>Como Danrley, abra <strong>Minhas ordens</strong> e clique no número da OS para ver a página completa. Consulte problema, motocicleta, orçamento e histórico. Em Requisições, escolha a OS, a peça, a quantidade e envie.</p><p class="expected">Esperado: a requisição nasce como Pendente e aguarda exclusivamente a decisão administrativa.</p></div></div>
-    <div class="step"><div class="step-number">7</div><div><h3>Administrador: aprove a requisição</h3><p>Entre como Luiz, consulte antes a quantidade da peça em Estoque e depois abra Requisições. Localize a solicitação de Danrley e clique em <strong>Aprovar</strong>.</p><p class="expected">Esperado: a requisição muda para Aprovada e a quantidade solicitada é descontada automaticamente do estoque.</p></div></div>
-    <div class="step"><div class="step-number">8</div><div><h3>Mecânico: finalize o trabalho</h3><p>Volte ao perfil Danrley. Na OS, use “Retomar” caso esteja aguardando peças e, ao terminar, clique em <strong>Concluir</strong>.</p><p class="expected">Esperado: a OS passa para Concluída e o histórico preserva cada mudança, data e responsável.</p></div></div>
-    <div class="step"><div class="step-number">9</div><div><h3>Cliente: acompanhe o resultado</h3><p>Entre como Danilo e abra Minhas ordens ou Histórico. Clique na OS concluída.</p><p class="expected">Esperado: Danilo visualiza o progresso final e o histórico completo, sem acessar dados de outros clientes.</p></div></div>
-
-    <h3>Fluxos alternativos que merecem teste</h3>
-    <ul>
-      <li><strong>Recusa do orçamento:</strong> Danilo pode recusar uma proposta pendente.</li>
-      <li><strong>Recusa da requisição:</strong> Luiz pode negar uma peça sem alterar o estoque.</li>
-      <li><strong>Aguardando peças:</strong> a equipe pode pausar e posteriormente retomar a OS.</li>
-      <li><strong>Reabertura:</strong> somente Luiz pode reabrir uma OS concluída e deve informar uma justificativa.</li>
-      <li><strong>Isolamento:</strong> Danilo enxerga apenas suas motocicletas, ordens e orçamentos.</li>
-    </ul>
-    <div class="footer"><span>Garagem 66</span><span>Roteiro principal — parte 2</span></div>
-  </section>
-
-  <section class="page">
-    <p class="eyebrow">05 — Referência rápida</p>
-    <h2>Mapa de navegação por perfil</h2>
+    <p class="eyebrow">03 — Referência rápida</p>
+    <h2>Checklist</h2>
     <div class="grid">
       <div class="card"><h3>Administrador</h3><ul><li>Dashboard</li><li>Clientes / Colaboradores</li><li>Motocicletas</li><li>Ordens</li><li>Orçamentos</li><li>Estoque</li><li>Requisições</li><li>Colaboradores</li></ul></div>
       <div class="card"><h3>Atendente</h3><ul><li>Dashboard</li><li>Clientes / Colaboradores</li><li>Motocicletas</li><li>Ordens</li><li>Orçamentos</li><li>Estoque</li><li>Requisições em consulta</li></ul></div>
       <div class="card"><h3>Mecânico</h3><ul><li>Dashboard</li><li>Minhas ordens</li><li>Orçamentos técnicos</li><li>Requisições</li><li>Estoque em consulta</li></ul></div>
       <div class="card"><h3>Cliente</h3><ul><li>Início</li><li>Minhas motocicletas</li><li>Minhas ordens</li><li>Orçamentos</li><li>Histórico</li></ul></div>
     </div>
-    <h3>Checklist para a banca</h3>
+    <h3>Funcionalidades para conferir</h3>
     <ul class="checklist">
       <li>Login inicia desconectado</li>
       <li>Menu muda conforme o perfil</li>
@@ -161,9 +176,33 @@
       <li>Histórico registra mudanças</li>
       <li>Logout permite trocar de ator</li>
     </ul>
-    <div class="callout"><strong>Dica de demonstração:</strong> mantenha este guia aberto em outra aba. Faça logout antes de trocar de usuário e atualize a página se uma implantação recente ainda estiver sendo propagada pelo Vercel.</div>
-    <h3>Resultado esperado da experiência</h3>
-    <p>Ao final, o avaliador deverá compreender que a Garagem 66 não é apenas um conjunto de telas: ela representa um processo colaborativo, com responsabilidades separadas, decisões rastreáveis e atualização consistente entre atendimento, execução, cliente e estoque.</p>
+    <h3>Tecnologias aplicadas</h3>
+    <div class="tech-grid">
+      <div class="tech"><strong>Frontend</strong>React, React Router e Vite para uma interface componentizada e navegação sem recarregamento.</div>
+      <div class="tech"><strong>Backend</strong>Django e Django REST Framework para regras, validações e API organizada por domínio.</div>
+      <div class="tech"><strong>Dados e segurança</strong>PostgreSQL, autenticação JWT, renovação de sessão e senhas protegidas pelo Django.</div>
+      <div class="tech"><strong>Publicação</strong>Frontend na Vercel e API/banco no Render, com configuração separada por variáveis de ambiente.</div>
+      <div class="tech"><strong>Arquitetura</strong>Separação entre páginas, API, serializers, serviços, permissões, modelos e regras de negócio.</div>
+      <div class="tech"><strong>Usabilidade</strong>Layout responsivo para smartphone e notebook, hierarquia visual, navegação por perfil e ações com identificação clara.</div>
+    </div>
+    <h3>Regras de negócio e boas práticas entregues</h3>
+    <ul class="checklist">
+      <li>Controle de acesso baseado em perfil</li>
+      <li>Cliente limitado aos próprios dados</li>
+      <li>Estados válidos para o ciclo da OS</li>
+      <li>Histórico de alterações e responsável</li>
+      <li>Orçamento com decisão do cliente</li>
+      <li>Notificação após aprovação</li>
+      <li>Requisição exclusiva do mecânico</li>
+      <li>Decisão exclusiva do administrador</li>
+      <li>Baixa transacional do estoque</li>
+      <li>Bloqueio de estoque insuficiente</li>
+      <li>API protegida além da interface</li>
+      <li>Dados fictícios para demonstração</li>
+      <li>Adaptação para telas pequenas e grandes</li>
+      <li>Formulários e ações orientados à tarefa</li>
+    </ul>
+    <div class="callout"><strong>Valor do projeto:</strong> a Garagem 66 integra usabilidade, responsividade, segurança, regras operacionais e persistência de dados. Cada ação respeita o papel do ator, produz efeitos consistentes nos módulos relacionados e mantém o processo rastreável do atendimento à conclusão, seja pelo smartphone ou pelo notebook.</div>
     <div class="footer"><span>Garagem 66</span><span>Fim do guia</span></div>
   </section>
 </body>
