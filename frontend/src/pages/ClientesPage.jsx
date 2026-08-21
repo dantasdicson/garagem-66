@@ -13,6 +13,8 @@ export default function ClientesPage() {
   const { usuario } = useAuth();
   const navigate = useNavigate();
   const [clientes, setClientes] = useState([]);
+  const [colaboradores, setColaboradores] = useState([]);
+  const [visualizacao, setVisualizacao] = useState("clientes");
   const [form, setForm] = useState(formularioVazio);
   const [editandoId, setEditandoId] = useState(null);
   const [carregando, setCarregando] = useState(true);
@@ -25,12 +27,16 @@ export default function ClientesPage() {
     setCarregando(true);
     try {
       setClientes(extrairLista(await apiRequest("/oficina/clientes/")));
+      if (usuario.tipo === "ADMINISTRADOR") {
+        const listaUsuarios = extrairLista(await apiRequest("/usuarios/"));
+        setColaboradores(listaUsuarios.filter((item) => item.tipo !== "CLIENTE"));
+      }
     } catch (error) {
       setErro(error.message);
     } finally {
       setCarregando(false);
     }
-  }, []);
+  }, [usuario.tipo]);
 
   useEffect(() => { if (autorizado) carregar(); }, [autorizado, carregar]);
   if (!autorizado) return <Navigate to="/" replace />;
@@ -70,12 +76,13 @@ export default function ClientesPage() {
 
   return (
     <section className="page-section">
-      <div className="page-heading"><div><p className="eyebrow">Atendimento</p><h1>Clientes</h1>
-        <p className="lead">Cadastre proprietários e mantenha os dados de contato atualizados.</p></div>
-        <button className="button button-secondary" type="button" onClick={cancelar}>Novo cliente</button>
+      <div className="page-heading"><div><p className="eyebrow">Atendimento e equipe</p><h1>Clientes / Colaboradores</h1>
+        <p className="lead">Consulte os proprietários e os profissionais responsáveis pela Garagem 66.</p></div>
+        {visualizacao === "clientes" ? <button className="button button-secondary" type="button" onClick={cancelar}>Novo cliente</button> : null}
       </div>
       {erro ? <p className="form-error" role="alert">{erro}</p> : null}
-      <div className="management-grid">
+      {usuario.tipo === "ADMINISTRADOR" ? <div className="table-toolbar"><label htmlFor="tipo-cadastro">Exibir</label><select id="tipo-cadastro" value={visualizacao} onChange={(event) => setVisualizacao(event.target.value)}><option value="clientes">Clientes</option><option value="colaboradores">Colaboradores</option></select></div> : null}
+      {visualizacao === "colaboradores" ? <div className="table-card"><div className="table-scroll"><table><thead><tr><th>Nome</th><th>Usuário</th><th>Perfil</th><th>Situação</th></tr></thead><tbody>{colaboradores.map((item) => <tr key={item.id}><td><strong>{[item.first_name, item.last_name].filter(Boolean).join(" ") || item.username}</strong><small>{item.email}</small></td><td>{item.username}</td><td>{item.tipo === "ADMINISTRADOR" ? "Administrador" : item.tipo === "ATENDENTE" ? "Atendente" : "Mecânico"}</td><td><span className={`status-badge ${item.is_active ? "request-aprovada" : "request-recusada"}`}>{item.is_active ? "Ativo" : "Inativo"}</span></td></tr>)}{!colaboradores.length && !carregando ? <tr><td colSpan="4" className="empty-cell">Nenhum colaborador cadastrado.</td></tr> : null}</tbody></table></div></div> : <div className="management-grid">
         <div className="table-card">
           {carregando ? <p className="muted" role="status">Carregando clientes...</p> : (
             <div className="table-scroll"><table><thead><tr><th>Nome</th><th>CPF</th><th>Contato</th><th><span className="sr-only">Ações</span></th></tr></thead>
@@ -97,7 +104,7 @@ export default function ClientesPage() {
           <div className="form-actions"><button className="button button-primary" disabled={salvando} type="submit">{salvando ? "Salvando..." : "Salvar cliente"}</button>
             {editandoId ? <button className="button button-link" type="button" onClick={cancelar}>Cancelar</button> : null}</div>
         </form>
-      </div>
+      </div>}
     </section>
   );
 }

@@ -15,6 +15,7 @@ const menusPorPerfil = {
 const iconesMenu = { clientes: "♙", motocicletas: "♞", ordens: "▤", orcamentos: "▧", estoque: "◇", usuarios: "♙", "minhas-ordens": "▤", requisicoes: "▱", "minhas-motos": "♞", historico: "◴" };
 
 function nomeMenu(valor) {
+  if (valor === "clientes") return "Clientes / Colaboradores";
   if (valor === "usuarios") return "Colaboradores";
   return valor.replaceAll("-", " ").replace(/\b\w/g, (letra) => letra.toUpperCase());
 }
