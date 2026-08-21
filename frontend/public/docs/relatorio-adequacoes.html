@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Relatório de Adequações — Garagem 66</title>
+  <style>
+    @page { size: A4; margin: 14mm; }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: #13232e; background: #e9eef1; font: 10pt/1.4 "Segoe UI", Arial, sans-serif; }
+    h1,h2,h3,p { margin-top: 0; }
+    h1 { font-size: 30pt; line-height: 1.05; }
+    h2 { font-size: 18pt; padding-bottom: 2mm; border-bottom: 2px solid #dc0712; }
+    h3 { font-size: 11.5pt; color: #a50009; margin: 4mm 0 2mm; }
+    p { margin-bottom: 2.5mm; }
+    ul,ol { margin: 1.5mm 0 3mm; padding-left: 6mm; }
+    li { margin: 1mm 0; }
+    a { color: #ba000a; font-weight: 650; }
+    .page { position: relative; width: 210mm; min-height: 297mm; margin: 8mm auto; padding: 14mm; background: #fff; box-shadow: 0 3mm 9mm #0002; break-after: page; overflow: hidden; }
+    .page:last-child { break-after: auto; }
+    .cover { color: #fff; background: linear-gradient(140deg,#0e202b 0%,#172d3a 67%,#900009 100%); padding: 24mm 20mm; }
+    .cover img { width: 38mm; height: 38mm; object-fit: contain; }
+    .cover h1 { margin-top: 25mm; max-width: 150mm; }
+    .cover .lead { color: #dce6eb; font-size: 14pt; max-width: 155mm; }
+    .cover .meta { position: absolute; bottom: 22mm; left: 20mm; color: #d2dde2; }
+    .tag { display: inline-block; margin-top: 8mm; padding: 2mm 4mm; border-radius: 20mm; background: #dc0712; font-size: 8pt; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+    .eyebrow { color: #dc0712; font-size: 8pt; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; }
+    .lead { font-size: 12pt; color: #405460; }
+    .callout { margin: 4mm 0; padding: 3.5mm 4mm; background: #f1f4f6; border-left: 4px solid #dc0712; border-radius: 0 2mm 2mm 0; }
+    .success { border-left-color: #16814c; background: #eef8f3; }
+    .warning { border-left-color: #e38b00; background: #fff8e9; }
+    .danger { border-left-color: #dc0712; background: #fff0f1; }
+    .grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 3mm; }
+    .card { padding: 3.5mm; border: 1px solid #d6dfe4; border-radius: 2.5mm; break-inside: avoid; }
+    .card strong { color: #a50009; }
+    table { width: 100%; border-collapse: collapse; margin: 3mm 0; font-size: 9pt; }
+    th,td { padding: 2mm 2.5mm; border: 1px solid #ced8de; text-align: left; vertical-align: top; }
+    th { background: #122632; color: #fff; }
+    tr:nth-child(even) td { background: #f6f8f9; }
+    .priority { display: inline-block; border-radius: 20mm; padding: .8mm 2.2mm; color: #fff; font-size: 7.5pt; font-weight: 800; }
+    .p1 { background: #c5000b; } .p2 { background: #d97900; } .p3 { background: #31749b; }
+    .check { columns: 2; column-gap: 8mm; }
+    .check li { list-style: "☐  "; break-inside: avoid; }
+    .score { font-size: 26pt; color: #dc0712; font-weight: 900; }
+    .footer { position: absolute; bottom: 8mm; left: 14mm; right: 14mm; display: flex; justify-content: space-between; padding-top: 2mm; border-top: 1px solid #d7dfe4; color: #71808a; font-size: 7.5pt; }
+    code { background: #edf1f3; padding: .5mm 1mm; border-radius: 1mm; overflow-wrap: anywhere; }
+    @media print {
+      body { background:#fff; font-size: 8.7pt; line-height: 1.3; }
+      .page { width:auto; min-height:269mm; margin:0; padding:0; box-shadow:none; overflow:visible; }
+      .cover { height:297mm; margin:-14mm; padding:24mm 20mm; overflow:hidden; }
+      .cover .meta { bottom:22mm; left:20mm; }
+      h2 { font-size:16pt; } h3 { font-size:10.5pt; }
+      .card { padding:2.5mm; } table { font-size:8pt; }
+      th,td { padding:1.5mm 2mm; }
+      .callout { margin:2.5mm 0; padding:2.5mm 3mm; }
+      .footer { bottom:0; left:0; right:0; }
+    }
+    @media screen and (max-width: 900px) {
+      html,body { max-width:100%; overflow-x:hidden; }
+      .page { width:calc(100% - 20px); min-height:0; margin:10px; padding:22px 17px 34px; overflow:visible; }
+      .cover { min-height:calc(100vh - 20px); }
+      .cover h1 { font-size:27pt; }
+      .cover .meta,.footer { position:relative; left:auto; right:auto; bottom:auto; margin-top:40px; }
+      .grid { grid-template-columns:1fr; }
+      .check { columns:1; }
+      table { display:block; overflow-x:auto; }
+    }
+  </style>
+</head>
+<body>
+  <section class="page cover">
+    <img src="https://raw.githubusercontent.com/dantasdicson/garagem-66/master/frontend/src/assets/garagem-66-logo.png" alt="Garagem 66">
+    <div class="tag">Plano para maximizar a avaliação</div>
+    <h1>Relatório de Adequações da Entrega Final</h1>
+    <p class="lead">O que precisa ser atualizado no relatório acadêmico, nos slides, nos testes e no vídeo para que a documentação represente corretamente o sistema Garagem 66 já implementado e publicado.</p>
+    <div class="meta"><strong>Projeto Multidisciplinar III</strong><br>Diagnóstico e plano de ação<br>Agosto de 2026</div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">01 — Diagnóstico executivo</p>
+    <h2>O sistema existe; falta transformar execução em evidência</h2>
+    <p class="lead">A Garagem 66 está publicada, possui frontend, API, banco de dados e fluxos por perfil. A principal lacuna não é técnica: relatório e apresentação ainda usam linguagem de planejamento futuro.</p>
+    <div class="callout success"><strong>Evidência disponível:</strong> aplicação funcional em <a href="https://garagem-66.vercel.app">garagem-66.vercel.app</a> e guia em <a href="https://garagem-66.vercel.app/docs/guia-garagem-66.html">guia online</a>.</div>
+    <div class="grid">
+      <div class="card"><strong>Aplicação</strong><p>React/Vite, Django REST, PostgreSQL, JWT, Vercel e Render.</p></div>
+      <div class="card"><strong>Domínio</strong><p>Clientes, motos, OS, orçamentos, estoque, requisições, histórico e notificações.</p></div>
+      <div class="card"><strong>Segurança</strong><p>Rotas protegidas e permissões validadas também pela API.</p></div>
+      <div class="card"><strong>Experiência</strong><p>Perfis distintos, responsividade, navegação orientada à tarefa e feedback de status.</p></div>
+    </div>
+    <h3>Risco atual</h3>
+    <div class="callout danger">O documento usa expressões como “será implementado”, “testes serão realizados”, “resultados esperados” e “implementação futura”. Uma avaliação baseada apenas no material pode não reconhecer o produto entregue.</div>
+    <h3>Meta de correção</h3>
+    <table>
+      <thead><tr><th>Estado</th><th>Faixa estimada</th><th>Condição</th></tr></thead>
+      <tbody>
+        <tr><td>Materiais atuais</td><td><strong>6,5–7,5</strong></td><td>Aplicação forte, mas testes e vídeo sem comprovação.</td></tr>
+        <tr><td>Após adequações essenciais</td><td><strong>8,5–9,5</strong></td><td>Relatório atualizado, testes reais, slides de resultados e vídeo.</td></tr>
+      </tbody>
+    </table>
+    <h3>Ordem recomendada</h3>
+    <ol><li>Unificar regras e permissões.</li><li>Atualizar implementação, testes, resultados e conclusão.</li><li>Atualizar slides e inserir acesso online.</li><li>Gravar o vídeo e adicionar seu link ao relatório.</li></ol>
+    <div class="footer"><span>Garagem 66</span><span>Diagnóstico executivo</span></div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">02 — Relatório acadêmico</p>
+    <h2>Alterações necessárias no documento Word</h2>
+    <table>
+      <thead><tr><th>Prioridade</th><th>Ação</th><th>Evidência a incluir</th></tr></thead>
+      <tbody>
+        <tr><td><span class="priority p1">CRÍTICA</span></td><td>Trocar futuro por execução concluída</td><td>“Foi implementado”, “foram realizados”, “resultados alcançados”.</td></tr>
+        <tr><td><span class="priority p1">CRÍTICA</span></td><td>Reescrever o capítulo 7</td><td>Arquitetura entregue, módulos implementados, deploy e limitações reais.</td></tr>
+        <tr><td><span class="priority p1">CRÍTICA</span></td><td>Documentar testes</td><td>Caso, perfil, pré-condição, passos, esperado, obtido, situação e evidência.</td></tr>
+        <tr><td><span class="priority p1">CRÍTICA</span></td><td>Registrar erros e correções</td><td>Problema encontrado, causa, solução e validação posterior.</td></tr>
+        <tr><td><span class="priority p1">CRÍTICA</span></td><td>Adicionar usabilidade de Nielsen</td><td>Princípio aplicado e exemplo concreto da interface.</td></tr>
+        <tr><td><span class="priority p2">ALTA</span></td><td>Atualizar resultados e conclusão</td><td>Resultados alcançados, não apenas esperados.</td></tr>
+        <tr><td><span class="priority p2">ALTA</span></td><td>Inserir acesso à aplicação</td><td>URL, QR Code, guia e credenciais fictícias.</td></tr>
+        <tr><td><span class="priority p2">ALTA</span></td><td>Completar cronograma</td><td>Datas, esforço planejado/real, status e entrega produzida.</td></tr>
+        <tr><td><span class="priority p2">ALTA</span></td><td>Criar sumário automático</td><td>Sumário, páginas e, se possível, lista de figuras.</td></tr>
+        <tr><td><span class="priority p3">MÉDIA</span></td><td>Atualizar tecnologias</td><td>Vite, API REST, JWT, Vercel, Render e variáveis de ambiente.</td></tr>
+      </tbody>
+    </table>
+    <h3>Nova estrutura do capítulo 7</h3>
+    <ol>
+      <li><strong>7.1 Implementação realizada:</strong> arquitetura, camadas e publicação.</li>
+      <li><strong>7.2 Funcionalidades implementadas:</strong> separar completas, parciais e não implementadas.</li>
+      <li><strong>7.3 Ambiente publicado:</strong> Vercel, Render, PostgreSQL e URLs.</li>
+      <li><strong>7.4 Casos de teste executados:</strong> tabela com evidências.</li>
+      <li><strong>7.5 Erros encontrados e soluções:</strong> histórico das correções.</li>
+      <li><strong>7.6 Usabilidade e responsividade:</strong> Nielsen, smartphone e notebook.</li>
+      <li><strong>7.7 Homologação simulada:</strong> resultado final por perfil.</li>
+    </ol>
+    <h3>Casos reais que devem virar evidência</h3>
+    <ul class="check">
+      <li>Login inicia desconectado</li><li>Menu muda por perfil</li><li>Cliente vê somente seus dados</li><li>OS abre em página própria</li><li>Cliente aprova orçamento</li><li>Admin e mecânico são notificados</li><li>Mecânico solicita peça</li><li>Somente admin decide requisição</li><li>Aprovação reduz estoque</li><li>Estoque insuficiente é bloqueado</li><li>Histórico registra responsável</li><li>Layout funciona em telas distintas</li>
+    </ul>
+    <div class="footer"><span>Garagem 66</span><span>Adequações do relatório</span></div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">03 — Coerência e testes</p>
+    <h2>Unificar sistema, relatório, diagramas, guia e slides</h2>
+    <p>Antes de produzir as evidências finais, todas as fontes precisam declarar as mesmas permissões e funcionalidades.</p>
+    <table>
+      <thead><tr><th>Tema</th><th>Inconsistência atual</th><th>Decisão necessária</th></tr></thead>
+      <tbody>
+        <tr><td>Emissão de orçamento</td><td>Matriz diz que mecânico emite; sistema e relatório ainda limitam.</td><td>Implementar e documentar ou remover da matriz.</td></tr>
+        <tr><td>Estoque do atendente</td><td>Relatório indica consulta; aplicação permite gerenciamento.</td><td>Definir permissão oficial e replicar em todos os materiais.</td></tr>
+        <tr><td>Entrada/checklist/fotos</td><td>Prototipação é detalhada; fluxo publicado precisa ser comprovado.</td><td>Classificar como completa, parcial ou planejada.</td></tr>
+        <tr><td>Terminologia</td><td>Slides e relatório usam “atores”; guia usa “perfis”.</td><td>Padronizar “perfis de acesso” no texto comum.</td></tr>
+        <tr><td>Estado do produto</td><td>Materiais dizem “futuro”; aplicação está publicada.</td><td>Alterar para passado e apresentar evidências.</td></tr>
+      </tbody>
+    </table>
+    <h3>Modelo mínimo para cada teste</h3>
+    <table>
+      <thead><tr><th>Campo</th><th>Exemplo</th></tr></thead>
+      <tbody>
+        <tr><td>Identificador</td><td>CT-08 — Aprovação de requisição</td></tr>
+        <tr><td>Perfil</td><td>Administrador Luiz Henrique</td></tr>
+        <tr><td>Pré-condição</td><td>Requisição pendente e peça com saldo suficiente.</td></tr>
+        <tr><td>Ação</td><td>Abrir Requisições e selecionar Aprovar.</td></tr>
+        <tr><td>Esperado</td><td>Status aprovado e baixa da quantidade no estoque.</td></tr>
+        <tr><td>Obtido</td><td>Requisição aprovada; estoque recalculado corretamente.</td></tr>
+        <tr><td>Situação</td><td>Aprovado, com screenshot antes/depois.</td></tr>
+      </tbody>
+    </table>
+    <h3>Erros reais que valorizam o relatório</h3>
+    <div class="grid">
+      <div class="card"><strong>Sessão indevida</strong><p>O sistema iniciava como administrador; foi corrigido para iniciar desconectado.</p></div>
+      <div class="card"><strong>Dados duplicados</strong><p>O cliente via duas motocicletas; a contagem passou a refletir apenas seus registros.</p></div>
+      <div class="card"><strong>Navegação da OS</strong><p>Detalhes abriam abaixo da lista; foi criada uma página dedicada.</p></div>
+      <div class="card"><strong>Integração do estoque</strong><p>A aprovação da requisição passou a descontar a peça com validação de saldo.</p></div>
+      <div class="card"><strong>Feedback de aprovação</strong><p>Administrador e mecânico passaram a receber notificações.</p></div>
+      <div class="card"><strong>Responsividade</strong><p>Identificação do usuário e layouts foram ajustados para diferentes dimensões.</p></div>
+    </div>
+    <div class="footer"><span>Garagem 66</span><span>Coerência e evidências de teste</span></div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">04 — Apresentação e vídeo</p>
+    <h2>Transformar proposta em demonstração de resultado</h2>
+    <h3>Slides que precisam mudar</h3>
+    <table>
+      <thead><tr><th>Slide atual</th><th>Alteração recomendada</th></tr></thead>
+      <tbody>
+        <tr><td>1 — Proposta</td><td>Adicionar “Sistema implementado e publicado”.</td></tr>
+        <tr><td>5 — Perfis</td><td>Padronizar terminologia e permissões finais.</td></tr>
+        <tr><td>7 — Arquitetura</td><td>Adicionar Vite, REST, JWT, Vercel e Render.</td></tr>
+        <tr><td>10–13 — Protótipos</td><td>Apresentar como interfaces implementadas e usar screenshots atuais.</td></tr>
+        <tr><td>14 — Planejamento</td><td>Mostrar planejado × realizado e testes concluídos.</td></tr>
+        <tr><td>15 — Resultados esperados</td><td>Renomear para “Resultados alcançados”.</td></tr>
+        <tr><td>Novo slide</td><td>Acesso online, QR Code, credenciais e guia.</td></tr>
+        <tr><td>Novo slide</td><td>Testes, erros corrigidos e evidências.</td></tr>
+      </tbody>
+    </table>
+    <h3>Roteiro sugerido para o vídeo</h3>
+    <ol>
+      <li><strong>Contexto e problema:</strong> processos manuais e falta de rastreabilidade.</li>
+      <li><strong>Levantamento:</strong> requisitos, perfis e regras principais.</li>
+      <li><strong>Decisões:</strong> arquitetura, tecnologias e modelagem UML.</li>
+      <li><strong>Demonstração:</strong> entrar como Fabio, Danilo, Danrley e Luiz.</li>
+      <li><strong>Fluxo integrado:</strong> OS → orçamento → aprovação → notificação → peça → estoque.</li>
+      <li><strong>Qualidade:</strong> testes, segurança, responsividade e Nielsen.</li>
+      <li><strong>Conclusão:</strong> resultados alcançados, limitações e evolução futura.</li>
+    </ol>
+    <div class="callout warning"><strong>Obrigatório:</strong> publicar o vídeo no YouTube como “não listado” e inserir o link clicável no relatório final. O arquivo de slides sozinho não atende integralmente à etapa 7.</div>
+    <h3>Boas práticas para a gravação</h3>
+    <ul class="check"><li>Som limpo e ambiente silencioso</li><li>Resolução mínima de 1080p</li><li>Zoom do navegador em 100%</li><li>Credenciais preparadas</li><li>Dados fictícios restaurados</li><li>Não improvisar regras</li><li>Mostrar smartphone e notebook</li><li>Encerrar com links e QR Code</li></ul>
+    <div class="footer"><span>Garagem 66</span><span>Apresentação e vídeo</span></div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">05 — Checklist final</p>
+    <h2>Condições para uma entrega competitiva</h2>
+    <h3>Relatório</h3>
+    <ul class="check"><li>Sumário automático</li><li>Páginas numeradas</li><li>URLs e QR Codes</li><li>Implementação no passado</li><li>Funcionalidades completas/parciais</li><li>Tecnologias atualizadas</li><li>Casos de teste executados</li><li>Erros e correções</li><li>Nielsen e responsividade</li><li>Cronograma realizado</li><li>Resultados alcançados</li><li>Link do vídeo</li></ul>
+    <h3>Aplicação</h3>
+    <ul class="check"><li>Login começa desconectado</li><li>Quatro perfis funcionam</li><li>Permissões coerentes</li><li>Dados demo restaurados</li><li>Fluxo de orçamento funciona</li><li>Notificações funcionam</li><li>Requisições funcionam</li><li>Estoque é recalculado</li><li>OS abre detalhes</li><li>Layout mobile validado</li></ul>
+    <h3>Slides e vídeo</h3>
+    <ul class="check"><li>Sem linguagem de implementação futura</li><li>Screenshots atuais</li><li>Resultados reais</li><li>Slide de acesso online</li><li>Demonstração dos quatro perfis</li><li>Vídeo não listado no YouTube</li><li>Link testado</li><li>Conclusão objetiva</li></ul>
+    <h3>Resultado esperado após as correções</h3>
+    <p class="score">8,5–9,5</p>
+    <p>Essa faixa depende da clareza do vídeo e da inclusão de evidências reais de teste. O software já fornece base suficiente para uma nota alta; o trabalho restante consiste em alinhar e comprovar o que foi realizado.</p>
+    <div class="callout success"><strong>Mensagem central da entrega:</strong> a Garagem 66 deixou de ser apenas uma proposta. É um sistema web publicado, responsivo e integrado, com regras de negócio aplicadas, perfis protegidos e fluxos demonstráveis.</div>
+    <div class="footer"><span>Garagem 66</span><span>Checklist de entrega</span></div>
+  </section>
+</body>
+</html>
