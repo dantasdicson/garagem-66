@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Guia de Avaliação — Garagem 66</title>
+  <style>
+    @page { size: A4; margin: 15mm 14mm 16mm; }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: #15202b; background: #e9eef1; font: 10.4pt/1.48 "Segoe UI", Arial, sans-serif; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { font-size: 30pt; line-height: 1.05; color: #0f1f2a; margin-bottom: 8mm; }
+    h2 { font-size: 19pt; color: #0f1f2a; border-bottom: 2px solid #df0712; padding-bottom: 2mm; margin: 0 0 5mm; }
+    h3 { font-size: 12pt; color: #b6000b; margin: 5mm 0 2mm; }
+    p { margin-bottom: 3mm; }
+    ul, ol { margin: 2mm 0 4mm; padding-left: 6mm; }
+    li { margin: 1.2mm 0; }
+    code { font: 9.5pt Consolas, monospace; background: #edf1f4; padding: 1mm 1.5mm; border-radius: 2mm; }
+    .page { break-after: page; width: 210mm; min-height: 297mm; margin: 8mm auto; padding: 15mm 14mm 16mm; position: relative; background: #fff; box-shadow: 0 3mm 10mm rgba(15,31,42,.12); overflow: hidden; }
+    .page:last-child { break-after: auto; }
+    .cover { background: linear-gradient(135deg, #0d1b25 0%, #152a38 63%, #8f0008 100%); color: #fff; height: 297mm; padding: 27mm 22mm; overflow: hidden; }
+    .cover::after { content: "66"; position: absolute; right: 8mm; bottom: -21mm; font: 900 135pt/1 Arial; color: rgba(255,255,255,.055); }
+    .cover img { width: 43mm; height: 43mm; object-fit: contain; margin-bottom: 18mm; }
+    .cover h1 { color: #fff; font-size: 34pt; max-width: 145mm; }
+    .cover .subtitle { font-size: 15pt; max-width: 145mm; color: #dbe5eb; }
+    .cover .tag { display: inline-block; color: #fff; background: #df0712; padding: 2mm 4mm; border-radius: 20mm; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; font-size: 8.5pt; margin-bottom: 8mm; }
+    .cover .meta { position: absolute; left: 22mm; bottom: 25mm; color: #c9d4da; }
+    .eyebrow { color: #df0712; text-transform: uppercase; letter-spacing: 1.5px; font-size: 8.5pt; font-weight: 800; }
+    .lead { font-size: 12.5pt; color: #425563; }
+    .callout { border-left: 4px solid #df0712; background: #f4f6f8; padding: 4mm 5mm; margin: 5mm 0; border-radius: 0 2mm 2mm 0; }
+    .callout strong { color: #a90009; }
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4mm; }
+    .card { border: 1px solid #d8e0e5; border-radius: 3mm; padding: 4mm; break-inside: avoid; }
+    .card h3 { margin-top: 0; }
+    .role { border-top: 4px solid #df0712; }
+    .credentials { width: 100%; border-collapse: collapse; margin: 4mm 0; }
+    .credentials th, .credentials td { border: 1px solid #cfd8de; padding: 2.4mm 3mm; text-align: left; }
+    .credentials th { background: #122431; color: #fff; }
+    .credentials tr:nth-child(even) td { background: #f5f7f8; }
+    .step { display: grid; grid-template-columns: 11mm 1fr; gap: 3mm; margin: 3mm 0; break-inside: avoid; }
+    .step-number { width: 9mm; height: 9mm; border-radius: 50%; background: #df0712; color: #fff; display: grid; place-items: center; font-weight: 800; }
+    .step h3 { margin: 0 0 1mm; color: #15202b; }
+    .expected { color: #1a653b; font-weight: 650; }
+    .matrix { width: 100%; margin-top: 4mm; border: 1px solid #263947; }
+    .flow { display: flex; align-items: stretch; gap: 2mm; margin: 5mm 0; }
+    .flow span { flex: 1; padding: 3mm 2mm; background: #142734; color: #fff; border-radius: 2mm; text-align: center; font-size: 8.5pt; font-weight: 650; }
+    .flow i { align-self: center; color: #df0712; font-style: normal; font-weight: 900; }
+    .checklist { columns: 2; column-gap: 8mm; }
+    .checklist li { break-inside: avoid; list-style: "☐  "; padding-left: 1mm; }
+    .footer { position: absolute; bottom: 0; left: 0; right: 0; border-top: 1px solid #d8e0e5; padding-top: 2mm; color: #6d7d87; font-size: 8pt; display: flex; justify-content: space-between; }
+    .small { font-size: 8.8pt; color: #5c6c76; }
+    .tech-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; margin: 4mm 0; }
+    .tech { padding: 3.5mm; border-radius: 2.5mm; background: #132735; color: #fff; break-inside: avoid; }
+    .tech strong { display: block; color: #ff535b; margin-bottom: 1mm; }
+    @media print {
+      body { background: #fff; font-size: 8.8pt; line-height: 1.32; }
+      h1 { font-size: 27pt; }
+      h2 { font-size: 16pt; margin-bottom: 3mm; }
+      h3 { font-size: 10.5pt; margin: 3mm 0 1.5mm; }
+      p { margin-bottom: 2mm; }
+      ul, ol { margin: 1mm 0 2.5mm; }
+      li { margin: .7mm 0; }
+      .page { width: auto; min-height: 266mm; margin: 0; padding: 0; box-shadow: none; overflow: visible; }
+      .cover { width: auto; min-height: 0; height: 297mm; margin: -15mm -14mm -16mm; padding: 27mm 22mm; overflow: hidden; }
+      .lead { font-size: 10.5pt; }
+      .card { padding: 2.5mm 3mm; }
+      .credentials { margin: 2mm 0; font-size: 8.3pt; }
+      .credentials th, .credentials td { padding: 1.6mm 2mm; }
+      .matrix { display: block; max-height: 86mm; width: auto; max-width: 100%; margin: 2.5mm auto 0; object-fit: contain; }
+      .tech-grid { gap: 2mm; margin: 2.5mm 0; }
+      .tech { padding: 2.3mm; font-size: 8pt; }
+      .callout { padding: 2.5mm 3.5mm; margin: 3mm 0; }
+      .checklist { font-size: 8.3pt; }
+    }
+    @media screen and (max-width: 900px) {
+      html, body { max-width: 100%; overflow-x: hidden; }
+      body { font-size: 10pt; }
+      .page { width: calc(100% - 20px); min-height: 0; margin: 10px; padding: 24px 18px 34px; overflow: visible; }
+      .cover { min-height: calc(100vh - 20px); height: auto; padding: 38px 24px; }
+      .cover img { width: 112px; height: 112px; margin-bottom: 32px; }
+      .cover h1 { font-size: 29pt; }
+      .cover h1, .cover .subtitle { width: 100%; max-width: 100%; overflow-wrap: anywhere; }
+      .cover .subtitle { font-size: 13pt; }
+      .cover .meta { position: relative; left: auto; bottom: auto; margin-top: 70px; }
+      .grid, .tech-grid { grid-template-columns: 1fr; }
+      .flow { flex-direction: column; }
+      .flow i { transform: rotate(90deg); }
+      .credentials { font-size: 8pt; }
+      .credentials th, .credentials td { padding: 6px 5px; overflow-wrap: anywhere; }
+      code { font-size: 7.5pt; padding: 2px; }
+      .checklist { columns: 1; }
+      .footer { position: relative; margin-top: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <section class="page cover">
+    <img src="https://raw.githubusercontent.com/dantasdicson/garagem-66/master/frontend/src/assets/garagem-66-logo.png" alt="Logotipo Garagem 66">
+    <div class="tag">Projeto Multidisciplinar III</div>
+    <h1>Guia de Avaliação e Navegação</h1>
+    <p class="subtitle">Uma introdução prática ao sistema Garagem 66, seus atores, responsabilidades e principais fluxos de atendimento.</p>
+    <div class="meta"><strong>Aplicação demonstrativa</strong><br>Guia para apresentação e testes funcionais<br>Agosto de 2026</div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">01 — Apresentação</p>
+    <h2>Conheça a Garagem 66</h2>
+    <p class="lead">A Garagem 66 é uma aplicação web para organizar o atendimento de uma oficina de motocicletas, conectando administração, recepção, execução mecânica e participação do cliente em um único fluxo rastreável.</p>
+    <div class="callout"><strong>Objetivo da avaliação:</strong> navegar com quatro perfis fictícios e comprovar como uma demanda percorre o sistema — do cadastro da motocicleta até a conclusão do serviço.</div>
+
+    <h3>O que o sistema centraliza</h3>
+    <div class="grid">
+      <div class="card"><strong>Atendimento</strong><p>Clientes, motocicletas, abertura e acompanhamento de ordens de serviço.</p></div>
+      <div class="card"><strong>Orçamentos</strong><p>Serviços, peças, valores e decisão eletrônica do cliente.</p></div>
+      <div class="card"><strong>Execução</strong><p>Atribuição ao mecânico, mudanças de status e histórico da OS.</p></div>
+      <div class="card"><strong>Estoque</strong><p>Cadastro de peças, requisições, aprovação e baixa automática.</p></div>
+    </div>
+
+    <h3>Usabilidade em diferentes dispositivos</h3>
+    <p>A experiência foi pensada para funcionar tanto em <strong>notebooks e computadores</strong> quanto em <strong>smartphones</strong>. O layout reorganiza menus, cartões, tabelas e formulários conforme o espaço disponível, preservando legibilidade, áreas de toque e acesso às ações principais.</p>
+    <p>Esse cuidado reforça um objetivo central do projeto: permitir que administração, recepção, mecânico e cliente utilizem o sistema com clareza no dispositivo mais conveniente para cada situação.</p>
+
+    <h3>Fluxo central</h3>
+    <div class="flow"><span>Recepção abre a OS</span><i>›</i><span>Orçamento é emitido</span><i>›</i><span>Cliente decide</span><i>›</i><span>Mecânico executa</span><i>›</i><span>Admin controla peças</span></div>
+
+    <h3>Como acessar</h3>
+    <p>Abra <strong>https://garagem-66.vercel.app</strong>. A aplicação começa desconectada. Entre com um dos acessos demonstrativos da próxima página e, ao trocar de ator, use sempre o botão <strong>Sair</strong>.</p>
+    <div class="callout"><strong>Dados de demonstração:</strong> todos os nomes, CPFs, motocicletas, ordens, valores e solicitações deste ambiente são fictícios e existem apenas para a apresentação acadêmica.</div>
+    <div class="footer"><span>Garagem 66</span><span>Guia de Avaliação</span></div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">02 — Atores e acesso</p>
+    <h2>Quatro perspectivas do mesmo atendimento</h2>
+    <table class="credentials">
+      <thead><tr><th>Ator</th><th>Função</th><th>Usuário</th><th>Senha</th></tr></thead>
+      <tbody>
+        <tr><td>Luiz Henrique</td><td>Administrador</td><td><code>luiz.henrique</code></td><td><code>Garagem66@Demo</code></td></tr>
+        <tr><td>Fabio Almeida</td><td>Atendente</td><td><code>fabio</code></td><td><code>Garagem66@Demo</code></td></tr>
+        <tr><td>Danrley Santos</td><td>Mecânico</td><td><code>danrley</code></td><td><code>Garagem66@Demo</code></td></tr>
+        <tr><td>Danilo Jota</td><td>Cliente</td><td><code>52998224725</code></td><td><code>Garagem66@Demo</code></td></tr>
+      </tbody>
+    </table>
+    <div class="grid">
+      <div class="card role"><h3>Administrador — Luiz</h3><p>Supervisiona toda a oficina, gerencia colaboradores e estoque, atribui responsáveis, decide requisições e reabre uma OS quando necessário.</p></div>
+      <div class="card role"><h3>Atendente — Fabio</h3><p>Recebe o cliente, registra seus dados e sua motocicleta, abre atendimentos, acompanha ordens e prepara orçamentos.</p></div>
+      <div class="card role"><h3>Mecânico — Danrley</h3><p>Consulta suas ordens, analisa o serviço, participa da elaboração do orçamento técnico, executa o trabalho e solicita peças.</p></div>
+      <div class="card role"><h3>Cliente — Danilo</h3><p>Consulta apenas seus dados, motocicleta, ordens e histórico; analisa, aprova ou recusa o orçamento apresentado.</p></div>
+    </div>
+    <h3>Regra de navegação</h3>
+    <p>O menu lateral muda de acordo com o perfil. Isso é intencional: cada ator visualiza somente as áreas relacionadas à sua responsabilidade. O nome e a função do usuário conectado aparecem no canto inferior esquerdo.</p>
+    <img class="matrix" src="https://raw.githubusercontent.com/dantasdicson/garagem-66/master/matriz-funcoes-atores-v2.png" alt="Matriz resumida de funcionalidades por ator">
+    <div class="footer"><span>Garagem 66</span><span>Atores e credenciais fictícias</span></div>
+  </section>
+
+  <section class="page">
+    <p class="eyebrow">03 — Referência rápida</p>
+    <h2>Checklist</h2>
+    <div class="grid">
+      <div class="card"><h3>Administrador</h3><ul><li>Dashboard</li><li>Clientes / Colaboradores</li><li>Motocicletas</li><li>Ordens</li><li>Orçamentos</li><li>Estoque</li><li>Requisições</li><li>Colaboradores</li></ul></div>
+      <div class="card"><h3>Atendente</h3><ul><li>Dashboard</li><li>Clientes / Colaboradores</li><li>Motocicletas</li><li>Ordens</li><li>Orçamentos</li><li>Estoque</li><li>Requisições em consulta</li></ul></div>
+      <div class="card"><h3>Mecânico</h3><ul><li>Dashboard</li><li>Minhas ordens</li><li>Orçamentos técnicos</li><li>Requisições</li><li>Estoque em consulta</li></ul></div>
+      <div class="card"><h3>Cliente</h3><ul><li>Início</li><li>Minhas motocicletas</li><li>Minhas ordens</li><li>Orçamentos</li><li>Histórico</li></ul></div>
+    </div>
+    <h3>Funcionalidades para conferir</h3>
+    <ul class="checklist">
+      <li>Login inicia desconectado</li>
+      <li>Menu muda conforme o perfil</li>
+      <li>Cliente não acessa dados alheios</li>
+      <li>OS abre em página própria</li>
+      <li>Orçamento pode ser detalhado</li>
+      <li>Cliente aprova ou recusa</li>
+      <li>Admin e mecânico são notificados</li>
+      <li>Mecânico solicita peças</li>
+      <li>Somente admin decide requisição</li>
+      <li>Aprovação reduz o estoque</li>
+      <li>Histórico registra mudanças</li>
+      <li>Logout permite trocar de ator</li>
+    </ul>
+    <h3>Tecnologias aplicadas</h3>
+    <div class="tech-grid">
+      <div class="tech"><strong>Frontend</strong>React, React Router e Vite para uma interface componentizada e navegação sem recarregamento.</div>
+      <div class="tech"><strong>Backend</strong>Django e Django REST Framework para regras, validações e API organizada por domínio.</div>
+      <div class="tech"><strong>Dados e segurança</strong>PostgreSQL, autenticação JWT, renovação de sessão e senhas protegidas pelo Django.</div>
+      <div class="tech"><strong>Publicação</strong>Frontend na Vercel e API/banco no Render, com configuração separada por variáveis de ambiente.</div>
+      <div class="tech"><strong>Arquitetura</strong>Separação entre páginas, API, serializers, serviços, permissões, modelos e regras de negócio.</div>
+      <div class="tech"><strong>Usabilidade</strong>Layout responsivo para smartphone e notebook, hierarquia visual, navegação por perfil e ações com identificação clara.</div>
+    </div>
+    <h3>Regras de negócio e boas práticas entregues</h3>
+    <ul class="checklist">
+      <li>Controle de acesso baseado em perfil</li>
+      <li>Cliente limitado aos próprios dados</li>
+      <li>Estados válidos para o ciclo da OS</li>
+      <li>Histórico de alterações e responsável</li>
+      <li>Orçamento com decisão do cliente</li>
+      <li>Notificação após aprovação</li>
+      <li>Requisição exclusiva do mecânico</li>
+      <li>Decisão exclusiva do administrador</li>
+      <li>Baixa transacional do estoque</li>
+      <li>Bloqueio de estoque insuficiente</li>
+      <li>API protegida além da interface</li>
+      <li>Dados fictícios para demonstração</li>
+      <li>Adaptação para telas pequenas e grandes</li>
+      <li>Formulários e ações orientados à tarefa</li>
+    </ul>
+    <div class="callout"><strong>Valor do projeto:</strong> a Garagem 66 integra usabilidade, responsividade, segurança, regras operacionais e persistência de dados. Cada ação respeita o papel do ator, produz efeitos consistentes nos módulos relacionados e mantém o processo rastreável do atendimento à conclusão, seja pelo smartphone ou pelo notebook.</div>
+    <div class="footer"><span>Garagem 66</span><span>Fim do guia</span></div>
+  </section>
+</body>
+</html>
