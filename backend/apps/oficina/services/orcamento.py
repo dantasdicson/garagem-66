@@ -43,6 +43,10 @@ def emitir_orcamento(
 ):
     if emitido_por.tipo not in {Usuario.Tipo.ADMINISTRADOR, Usuario.Tipo.ATENDENTE}:
         raise ValidationError({"emitido_por": "Somente administrador ou atendente pode emitir orçamento."})
+    if valor_mao_obra < 0 or valor_pecas < 0:
+        raise ValidationError({"valor_total": "Os valores do orçamento não podem ser negativos."})
+    if valor_mao_obra + valor_pecas <= 0:
+        raise ValidationError({"valor_total": "Informe um valor total maior que zero."})
 
     ordem_bloqueada = OrdemServico.objects.select_for_update().get(pk=ordem_servico.pk)
     estados_permitidos = {OrdemServico.Status.ABERTA, OrdemServico.Status.AGUARDANDO_ORCAMENTO}

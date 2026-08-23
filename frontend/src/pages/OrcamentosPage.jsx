@@ -4,7 +4,7 @@ import { apiRequest } from "../api/client";
 import { useAuth } from "../contexts/AuthContext";
 import { extrairLista } from "../utils/apiData";
 
-const orcamentoVazio = { ordem_servico: "", validade: "", observacoes: "" };
+const orcamentoVazio = { ordem_servico: "", valor_mao_obra: "", valor_pecas: "", validade: "", observacoes: "" };
 const servicoVazio = { descricao: "", quantidade: "1", valor_unitario: "" };
 const pecaVazia = { peca: "", quantidade: "1", valor_unitario: "" };
 
@@ -48,6 +48,7 @@ export default function OrcamentosPage() {
     [idsComOrcamento, ordens],
   );
   const selecionado = orcamentos.find((item) => item.id === selecionadoId) || null;
+  const totalNovoOrcamento = Number(formOrcamento.valor_mao_obra || 0) + Number(formOrcamento.valor_pecas || 0);
 
   const carregar = useCallback(async (manterSelecionado = true) => {
     setErro("");
@@ -84,6 +85,8 @@ export default function OrcamentosPage() {
         method: "POST",
         body: JSON.stringify({
           ordem_servico: Number(formOrcamento.ordem_servico),
+          valor_mao_obra: formOrcamento.valor_mao_obra,
+          valor_pecas: formOrcamento.valor_pecas,
           validade: formOrcamento.validade || null,
           observacoes: formOrcamento.observacoes.trim(),
         }),
@@ -205,7 +208,7 @@ export default function OrcamentosPage() {
             {ehCliente && selecionado.status === "AGUARDANDO_APROVACAO" ? <div className="decision-panel"><div><strong>Este orçamento aguarda sua decisão.</strong><p>Confira todos os itens e valores antes de continuar.</p></div><div><button className="button button-secondary" disabled={Boolean(processando)} type="button" onClick={() => decidir("aprovar")}>Aprovar orçamento</button><button className="button button-danger" disabled={Boolean(processando)} type="button" onClick={() => decidir("recusar")}>Recusar</button></div></div> : null}
           </article> : null}
         </div>
-        {podeEditar ? <form className="form-card" onSubmit={emitir}><div><p className="eyebrow">Nova proposta</p><h2>Emitir orçamento</h2></div><label htmlFor="orcamento-os">Ordem de serviço</label><select id="orcamento-os" required value={formOrcamento.ordem_servico} onChange={(e) => setFormOrcamento((valor) => ({ ...valor, ordem_servico: e.target.value }))}><option value="">Selecione</option>{ordensElegiveis.map((ordem) => <option key={ordem.id} value={ordem.id}>{ordem.numero} — {ordem.descricao_problema}</option>)}</select>{!ordensElegiveis.length ? <small className="muted">Não há OS sem orçamento aguardando emissão.</small> : null}<label htmlFor="orcamento-validade">Validade</label><input id="orcamento-validade" type="date" value={formOrcamento.validade} onChange={(e) => setFormOrcamento((valor) => ({ ...valor, validade: e.target.value }))} /><label htmlFor="orcamento-observacoes">Observações</label><textarea id="orcamento-observacoes" rows="4" value={formOrcamento.observacoes} onChange={(e) => setFormOrcamento((valor) => ({ ...valor, observacoes: e.target.value }))} /><button className="button button-primary" disabled={processando === "emitir" || !ordensElegiveis.length} type="submit">{processando === "emitir" ? "Emitindo..." : "Emitir orçamento"}</button></form> : null}
+        {podeEditar ? <form className="form-card" onSubmit={emitir}><div><p className="eyebrow">Nova proposta</p><h2>Emitir orçamento</h2></div><label htmlFor="orcamento-os">Ordem de serviço</label><select id="orcamento-os" required value={formOrcamento.ordem_servico} onChange={(e) => setFormOrcamento((valor) => ({ ...valor, ordem_servico: e.target.value }))}><option value="">Selecione</option>{ordensElegiveis.map((ordem) => <option key={ordem.id} value={ordem.id}>{ordem.numero} — {ordem.descricao_problema}</option>)}</select>{!ordensElegiveis.length ? <small className="muted">Não há OS sem orçamento aguardando emissão.</small> : null}<div className="field-row"><div><label htmlFor="orcamento-mao-obra">Valor da mão de obra</label><input id="orcamento-mao-obra" type="number" min="0" step="0.01" placeholder="0,00" required value={formOrcamento.valor_mao_obra} onChange={(e) => setFormOrcamento((valor) => ({ ...valor, valor_mao_obra: e.target.value }))} /></div><div><label htmlFor="orcamento-pecas">Valor estimado das peças</label><input id="orcamento-pecas" type="number" min="0" step="0.01" placeholder="0,00" required value={formOrcamento.valor_pecas} onChange={(e) => setFormOrcamento((valor) => ({ ...valor, valor_pecas: e.target.value }))} /></div></div><div className="budget-issue-total"><span>Valor total do orçamento</span><strong>{moeda(totalNovoOrcamento)}</strong></div><label htmlFor="orcamento-validade">Validade</label><input id="orcamento-validade" type="date" value={formOrcamento.validade} onChange={(e) => setFormOrcamento((valor) => ({ ...valor, validade: e.target.value }))} /><label htmlFor="orcamento-observacoes">Observações</label><textarea id="orcamento-observacoes" rows="4" value={formOrcamento.observacoes} onChange={(e) => setFormOrcamento((valor) => ({ ...valor, observacoes: e.target.value }))} /><button className="button button-primary" disabled={processando === "emitir" || !ordensElegiveis.length || totalNovoOrcamento <= 0} type="submit">{processando === "emitir" ? "Emitindo..." : "Emitir orçamento"}</button></form> : null}
       </div>
     </section>
   );

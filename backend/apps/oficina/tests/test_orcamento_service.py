@@ -67,6 +67,19 @@ class OrcamentoServiceTests(TestCase):
         self.assertEqual(historico.responsavel, self.atendente)
         self.assertEqual(historico.novo_status, OrdemServico.Status.AGUARDANDO_APROVACAO)
 
+    def test_nao_emite_orcamento_sem_valor(self):
+        with self.assertRaisesMessage(ValidationError, "Informe um valor total maior que zero"):
+            emitir_orcamento(
+                ordem_servico=self.ordem,
+                emitido_por=self.atendente,
+                valor_mao_obra=Decimal("0"),
+                valor_pecas=Decimal("0"),
+            )
+
+        self.ordem.refresh_from_db()
+        self.assertEqual(self.ordem.status, OrdemServico.Status.AGUARDANDO_ORCAMENTO)
+        self.assertFalse(Orcamento.objects.exists())
+
     def test_cliente_proprietario_pode_aprovar(self):
         orcamento = self.emitir()
 
