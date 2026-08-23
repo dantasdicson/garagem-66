@@ -322,8 +322,8 @@ class Command(BaseCommand):
             defaults={
                 "cliente": cliente_video,
                 "marca": "Honda",
-                "modelo": "CG 160 Titan",
-                "ano": 2022,
+                "modelo": "CRF 1100L Africa Twin",
+                "ano": 2024,
                 "chassi": "9C2VIDEO660000001",
                 "cor": "Vermelha",
             },
