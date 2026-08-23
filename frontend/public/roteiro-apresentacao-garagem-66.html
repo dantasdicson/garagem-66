@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101b2d">
+  <title>Roteiro de apresentação — Garagem 66</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --navy: #101b2d;
+      --blue: #1d4ed8;
+      --paper: #ffffff;
+      --background: #eef2f7;
+      --text: #172033;
+      --muted: #617087;
+      --line: #dbe3ee;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    header {
+      padding: 36px 20px 30px;
+      background: linear-gradient(135deg, #0b1424, #183052);
+      color: white;
+    }
+
+    header > div, main { max-width: 760px; margin: 0 auto; }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: #a8c7ff;
+      font-size: .76rem;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    h1 { margin: 0; font-size: clamp(1.8rem, 7vw, 2.8rem); line-height: 1.12; }
+
+    .subtitle { margin: 12px 0 0; color: #d7e4f8; font-size: .95rem; }
+
+    .summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .summary span {
+      padding: 6px 11px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      font-size: .78rem;
+      font-weight: 700;
+    }
+
+    main { padding: 20px 14px 50px; }
+
+    .tip {
+      margin-bottom: 16px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 8px;
+      background: #e8f0ff;
+      color: #28446f;
+      font-size: .86rem;
+    }
+
+    section {
+      margin: 14px 0;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper);
+      box-shadow: 0 5px 18px rgba(19, 38, 70, .05);
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .time {
+      flex: none;
+      padding: 5px 9px;
+      border-radius: 6px;
+      background: var(--navy);
+      color: white;
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+    }
+
+    h2 { margin: 0; font-size: 1.08rem; line-height: 1.25; }
+
+    p { margin: 0 0 13px; }
+    p:last-child { margin-bottom: 0; }
+
+    .action {
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed var(--line);
+      color: var(--blue);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .035em;
+      text-transform: uppercase;
+    }
+
+    footer {
+      padding: 0 20px 32px;
+      color: var(--muted);
+      text-align: center;
+      font-size: .76rem;
+    }
+
+    @media (max-width: 540px) {
+      body { font-size: 17px; line-height: 1.66; }
+      header { padding-top: 28px; }
+      main { padding-inline: 10px; }
+      section { padding: 19px 17px; border-radius: 11px; }
+      .section-heading { align-items: flex-start; flex-direction: column; gap: 7px; }
+    }
+
+    @media print {
+      body { background: white; font-size: 11pt; line-height: 1.45; }
+      header { padding: 20px 0; background: white; color: var(--text); }
+      header .subtitle { color: var(--muted); }
+      header .eyebrow, .summary, .tip, .action, footer { display: none; }
+      main { max-width: none; padding: 0; }
+      section { break-inside: avoid; margin: 0 0 8px; padding: 12px; box-shadow: none; }
+      .time { color: var(--text); background: #edf1f6; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <p class="eyebrow">Projeto Multidisciplinar III</p>
+      <h1>Roteiro de apresentação — Garagem 66</h1>
+      <p class="subtitle">Demonstração objetiva da aplicação em funcionamento</p>
+      <div class="summary">
+        <span>Duração: aproximadamente 4 minutos</span>
+        <span>Celular e notebook</span>
+        <span>Dados fictícios</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <aside class="tip">Leia com calma e realize a ação indicada em azul antes de começar cada trecho.</aside>
+
+    <section>
+      <div class="section-heading"><span class="time">0:00–0:35</span><h2>Introdução</h2></div>
+      <p class="action">Ação na tela: mostrar a página inicial e o login</p>
+      <p>Olá! Vou apresentar o meu Projeto Multidisciplinar III, chamado Garagem 66.</p>
+      <p>O projeto consiste em um sistema web responsivo para o gerenciamento de uma oficina especializada em motocicletas Big Trail.</p>
+      <p>A ideia surgiu porque, em muitas oficinas, orçamentos e informações ficam dispersos, gerando falhas de comunicação entre mecânicos, atendentes e administradores. Isso pode prejudicar o cliente, que precisa de transparência, agilidade e acompanhamento durante o atendimento.</p>
+      <p>O sistema organiza todo esse processo em um único ambiente.</p>
+    </section>
+
+    <section>
+      <div class="section-heading"><span class="time">0:35–1:05</span><h2>Perfis e segurança</h2></div>
+      <p class="action">Ação na tela: apresentar rapidamente os perfis disponíveis</p>
+      <p>O sistema possui quatro perfis: Administrador, Atendente, Mecânico e Cliente. Cada usuário acessa somente as funcionalidades relacionadas à sua função.</p>
+      <p>O Administrador gerencia usuários, clientes, colaboradores, estoque, requisições e a publicação dos orçamentos. O Atendente cadastra clientes, motocicletas e ordens de serviço.</p>
+      <p>O Mecânico acompanha as ordens atribuídas a ele, prepara orçamentos e registra os serviços realizados. O Cliente acompanha suas motocicletas e ordens de serviço, além de aprovar ou recusar os orçamentos publicados.</p>
+    </section>
+
+    <section>
+      <div class="section-heading"><span class="time">1:05–1:35</span><h2>Administrador</h2></div>
+      <p class="action">Ação na tela: entrar como administrador e mostrar o painel</p>
+      <p>Primeiro, estou entrando como Administrador. Neste perfil, é possível acompanhar os indicadores da oficina e gerenciar clientes e colaboradores.</p>
+      <p>O Administrador também controla o estoque, analisa requisições de peças e revisa os orçamentos preparados pela equipe antes que sejam publicados para o cliente.</p>
+    </section>
+
+    <section>
+      <div class="section-heading"><span class="time">1:35–2:10</span><h2>Entrada da motocicleta</h2></div>
+      <p class="action">Ação na tela: entrar como Camila e abrir a ordem de serviço</p>
+      <p>Agora estou acessando o perfil da Atendente Camila Rocha. Ela dará entrada no atendimento da cliente fictícia Mariana Costa.</p>
+      <p>A motocicleta é uma BMW R 1250 GS, da categoria Big Trail. A ordem de serviço informa ruído no freio dianteiro e dificuldade na partida.</p>
+      <p>Durante a abertura da ordem, o mecânico Bruno Martins é definido como responsável. A atendente não possui motocicleta própria cadastrada; ela apenas registra a motocicleta da cliente.</p>
+    </section>
+
+    <section>
+      <div class="section-heading"><span class="time">2:10–2:45</span><h2>Mecânico e orçamento</h2></div>
+      <p class="action">Ação na tela: entrar como Bruno e criar o rascunho</p>
+      <p>Agora acesso o sistema como o Mecânico Bruno Martins. Ele visualiza somente as ordens de serviço atribuídas a ele.</p>
+      <p>O mecânico abre a ordem e prepara o orçamento, informando os serviços, as peças necessárias e os respectivos valores.</p>
+      <p>O orçamento é salvo como rascunho. O mecânico não pode publicá-lo diretamente para o cliente, garantindo uma etapa de conferência administrativa.</p>
+    </section>
+
+    <section>
+      <div class="section-heading"><span class="time">2:45–3:10</span><h2>Publicação administrativa</h2></div>
+      <p class="action">Ação na tela: voltar ao administrador e publicar</p>
+      <p>Retornando ao perfil do Administrador, o orçamento aparece como aguardando publicação.</p>
+      <p>O Administrador revisa os serviços, as peças e o valor total. Estando tudo correto, utiliza a opção “Publicar para o cliente”. Somente depois dessa publicação o orçamento fica disponível para a decisão da cliente.</p>
+    </section>
+
+    <section>
+      <div class="section-heading"><span class="time">3:10–3:30</span><h2>Aprovação da cliente</h2></div>
+      <p class="action">Ação na tela: entrar como Mariana e aprovar o orçamento</p>
+      <p>Agora acesso o perfil da Cliente Mariana Costa. Ela visualiza sua motocicleta, acompanha a ordem de serviço e abre o orçamento publicado.</p>
+      <p>Depois de conferir os itens e valores, a cliente aprova o orçamento. Essa decisão atualiza o andamento da ordem e informa a equipe responsável.</p>
+    </section>
+
+    <section>
+      <div class="section-heading"><span class="time">3:30–3:50</span><h2>Execução e conclusão</h2></div>
+      <p class="action">Ação na tela: voltar ao mecânico, registrar e concluir</p>
+      <p>De volta ao perfil do Mecânico, a aprovação já está disponível. Ele inicia a execução, registra os serviços realizados e as peças utilizadas.</p>
+      <p>Ao finalizar, descreve o trabalho executado e conclui a ordem de serviço, mantendo um histórico claro do atendimento.</p>
+    </section>
+
+    <section>
+      <div class="section-heading"><span class="time">3:50–4:10</span><h2>Encerramento</h2></div>
+      <p class="action">Ação na tela: mostrar o painel final ou a ordem concluída</p>
+      <p>Dessa forma, o Garagem 66 centraliza clientes, motocicletas, ordens de serviço, orçamentos, estoque e requisições.</p>
+      <p>A aplicação possui controle de acesso por perfil, regras de negócio, banco de dados, API e interface responsiva para notebooks e smartphones.</p>
+      <p>O resultado é um atendimento mais organizado, seguro e transparente para a oficina e para o cliente. Obrigado!</p>
+    </section>
+  </main>
+
+  <footer>Garagem 66 • Projeto Multidisciplinar III</footer>
+</body>
+</html>
