@@ -39,7 +39,7 @@ export default function LoginPage() {
         </form>
         <aside className="demo-access"><strong>ⓘ Primeiro acesso</strong><p>Sua senha inicial é sua data de nascimento no formato DDMMAAAA.</p>
           <details><summary>Acessos para demonstração</summary><p>Senha: <code>Garagem66@Demo</code></p>
-            <dl className="demo-users"><div><dt>Administrador — Luiz Henrique</dt><dd>luiz.henrique</dd></div><div><dt>Atendente — Fabio</dt><dd>fabio</dd></div><div><dt>Mecânico — Danrley</dt><dd>danrley</dd></div><div><dt>Cliente — Danilo Jota</dt><dd>52998224725</dd></div></dl>
+            <dl className="demo-users"><div><dt>Administrador — Renato Almeida</dt><dd>renato.almeida</dd></div><div><dt>Atendente — Camila Rocha</dt><dd>camila.rocha</dd></div><div><dt>Mecânico — Bruno Martins</dt><dd>bruno.martins</dd></div><div><dt>Cliente — Mariana Costa</dt><dd>11144477735</dd></div></dl>
           </details>
         </aside>
       </section>

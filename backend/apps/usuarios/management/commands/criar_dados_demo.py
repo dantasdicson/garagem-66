@@ -276,4 +276,56 @@ class Command(BaseCommand):
                     "decidida_por": usuarios[Usuario.Tipo.ADMINISTRADOR] if status_requisicao == RequisicaoPeca.Status.RECUSADA else None,
                 },
             )
+
+        # Segundo cenário demonstrativo, preparado para a gravação do vídeo.
+        # Os perfis e a motocicleta já existem, mas nenhuma OS é criada para que
+        # a apresentação possa começar pelo registro de entrada feito pela Atendente.
+        usuarios_video = {}
+        configuracoes_video = {
+            "renato.almeida": ("Renato", "Almeida", Usuario.Tipo.ADMINISTRADOR),
+            "camila.rocha": ("Camila", "Rocha", Usuario.Tipo.ATENDENTE),
+            "bruno.martins": ("Bruno", "Martins", Usuario.Tipo.MECANICO),
+            "11144477735": ("Mariana", "Costa", Usuario.Tipo.CLIENTE),
+        }
+        for username, (nome, sobrenome, tipo) in configuracoes_video.items():
+            eh_administrador = tipo == Usuario.Tipo.ADMINISTRADOR
+            usuario, _ = Usuario.objects.update_or_create(
+                username=username,
+                defaults={
+                    "email": f"{username.replace('.', '-')}@video.garagem66.local",
+                    "first_name": nome,
+                    "last_name": sobrenome,
+                    "tipo": tipo,
+                    "is_active": True,
+                    "is_staff": eh_administrador,
+                    "is_superuser": eh_administrador,
+                    "deve_alterar_senha": False,
+                },
+            )
+            usuario.set_password(senha)
+            usuario.save(update_fields=("password",))
+            usuarios_video[tipo] = usuario
+
+        cliente_video, _ = Cliente.objects.update_or_create(
+            cpf="11144477735",
+            defaults={
+                "usuario": usuarios_video[Usuario.Tipo.CLIENTE],
+                "nome": "Mariana Costa",
+                "data_nascimento": date(1995, 5, 15),
+                "email": "mariana.costa@video.garagem66.local",
+                "telefone": "(84) 99966-2026",
+                "endereco": "Rua do Atendimento, 66 - Natal/RN",
+            },
+        )
+        Motocicleta.objects.update_or_create(
+            placa="TST6A66",
+            defaults={
+                "cliente": cliente_video,
+                "marca": "Honda",
+                "modelo": "CG 160 Titan",
+                "ano": 2022,
+                "chassi": "9C2VIDEO660000001",
+                "cor": "Vermelha",
+            },
+        )
         self.stdout.write(self.style.SUCCESS("Dados de demonstração criados/restaurados com sucesso."))

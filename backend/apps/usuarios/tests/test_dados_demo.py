@@ -2,7 +2,7 @@ from django.core.management import call_command
 from django.test import TestCase
 
 from apps.estoque.models import RequisicaoPeca
-from apps.oficina.models import Cliente, EntradaVeiculo, Orcamento, OrdemServico
+from apps.oficina.models import Cliente, EntradaVeiculo, Motocicleta, Orcamento, OrdemServico
 from apps.usuarios.models import Usuario
 
 
@@ -27,3 +27,14 @@ class DadosDemoCommandTests(TestCase):
         administrador = Usuario.objects.get(username="luiz.henrique")
         self.assertTrue(administrador.is_staff)
         self.assertTrue(administrador.is_superuser)
+
+        self.assertEqual(Usuario.objects.filter(username__in=(
+            "renato.almeida", "camila.rocha", "bruno.martins", "11144477735"
+        )).count(), 4)
+        self.assertEqual(Cliente.objects.filter(cpf="11144477735", nome="Mariana Costa").count(), 1)
+        motocicleta_video = Motocicleta.objects.get(placa="TST6A66")
+        self.assertEqual(motocicleta_video.cliente.cpf, "11144477735")
+        self.assertEqual(motocicleta_video.modelo, "CG 160 Titan")
+        self.assertFalse(OrdemServico.objects.filter(motocicleta=motocicleta_video).exists())
+        self.assertTrue(Usuario.objects.get(username="renato.almeida").check_password("Garagem66@Demo"))
+        self.assertTrue(Usuario.objects.get(username="renato.almeida").is_superuser)
