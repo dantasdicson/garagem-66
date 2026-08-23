@@ -372,7 +372,7 @@ export default function OrcamentosPage() {
                                 </div> : null}
                         </article> : null}
                 </div>
-                {podeEditar ? <form className="form-card" onSubmit={emitir}>
+                {podeEditar ? <form className="form-card budget-create-form" onSubmit={emitir}>
                     <div><p className="eyebrow">Nova proposta</p><h2>Criar rascunho</h2></div>
                     <label htmlFor="orcamento-os">Ordem de serviço</label><select id="orcamento-os" required
                                                                                   value={formOrcamento.ordem_servico}
