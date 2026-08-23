@@ -3,9 +3,9 @@ from rest_framework import serializers
 from rest_framework.viewsets import ModelViewSet
 
 from apps.usuarios.models import Usuario
-from apps.usuarios.permissions import PodeGerenciarOperacao, SenhaAtualizada
+from apps.usuarios.permissions import IsEquipeOficina, SenhaAtualizada
 
-from ..models import ItemOrcamentoServico
+from ..models import ItemOrcamentoServico, Orcamento
 from ..serializers import ItemOrcamentoServicoSerializer
 from ..services import remover_item_previsto
 
@@ -16,13 +16,15 @@ class ItemOrcamentoServicoViewSet(ModelViewSet):
     http_method_names = ("get", "post", "delete", "head", "options")
 
     def get_permissions(self):
-        return [SenhaAtualizada()] if self.request.method in ("GET", "HEAD", "OPTIONS") else [PodeGerenciarOperacao()]
+        return [SenhaAtualizada()] if self.request.method in ("GET", "HEAD", "OPTIONS") else [IsEquipeOficina()]
 
     def get_queryset(self):
         queryset = super().get_queryset()
         usuario = self.request.user
         if usuario.tipo == Usuario.Tipo.CLIENTE:
-            return queryset.filter(orcamento__ordem_servico__cliente__usuario=usuario)
+            return queryset.filter(orcamento__ordem_servico__cliente__usuario=usuario).exclude(
+                orcamento__status=Orcamento.Status.RASCUNHO
+            )
         if usuario.tipo == Usuario.Tipo.MECANICO:
             return queryset.filter(orcamento__ordem_servico__mecanico=usuario)
         return queryset

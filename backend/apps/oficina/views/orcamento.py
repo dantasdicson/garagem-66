@@ -5,11 +5,11 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from apps.usuarios.models import Usuario
-from apps.usuarios.permissions import IsCliente, PodeGerenciarOperacao, SenhaAtualizada
+from apps.usuarios.permissions import IsAdministrador, IsCliente, IsEquipeOficina, SenhaAtualizada
 
 from ..models import Orcamento
 from ..serializers import OrcamentoSerializer
-from ..services import decidir_orcamento
+from ..services import decidir_orcamento, publicar_orcamento
 
 class OrcamentoViewSet(ModelViewSet):
     queryset = Orcamento.objects.select_related(
@@ -21,15 +21,19 @@ class OrcamentoViewSet(ModelViewSet):
     def get_permissions(self):
         if self.action in {"aprovar", "recusar"}:
             return [IsCliente()]
+        if self.action == "publicar":
+            return [IsAdministrador()]
         if self.action in {"create", "update", "partial_update"}:
-            return [PodeGerenciarOperacao()]
+            return [IsEquipeOficina()]
         return [SenhaAtualizada()]
 
     def get_queryset(self):
         queryset = super().get_queryset()
         usuario = self.request.user
         if usuario.tipo == Usuario.Tipo.CLIENTE:
-            return queryset.filter(ordem_servico__cliente__usuario=usuario)
+            return queryset.filter(
+                ordem_servico__cliente__usuario=usuario,
+            ).exclude(status=Orcamento.Status.RASCUNHO)
         if usuario.tipo == Usuario.Tipo.MECANICO:
             return queryset.filter(ordem_servico__mecanico=usuario)
         return queryset
@@ -53,3 +57,15 @@ class OrcamentoViewSet(ModelViewSet):
     @action(detail=True, methods=("post",))
     def recusar(self, request, pk=None):
         return self._decidir(request, Orcamento.Status.RECUSADO)
+
+    @action(detail=True, methods=("post",))
+    def publicar(self, request, pk=None):
+        try:
+            orcamento = publicar_orcamento(
+                orcamento=self.get_object(),
+                administrador=request.user,
+            )
+        except DjangoValidationError as erro:
+            detalhes = erro.message_dict if hasattr(erro, "message_dict") else erro.messages
+            raise serializers.ValidationError(detalhes) from erro
+        return Response(self.get_serializer(orcamento).data, status=status.HTTP_200_OK)

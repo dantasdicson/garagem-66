@@ -3,6 +3,7 @@ from django.db import models
 
 class Orcamento(models.Model):
     class Status(models.TextChoices):
+        RASCUNHO = "RASCUNHO", "Rascunho aguardando publicação"
         AGUARDANDO_APROVACAO = "AGUARDANDO_APROVACAO", "Aguardando aprovação"
         APROVADO = "APROVADO", "Aprovado"
         RECUSADO = "RECUSADO", "Recusado"
@@ -14,7 +15,7 @@ class Orcamento(models.Model):
     status = models.CharField(
         max_length=25,
         choices=Status.choices,
-        default=Status.AGUARDANDO_APROVACAO,
+        default=Status.RASCUNHO,
     )
     validade = models.DateField(null=True, blank=True)
     decidido_em = models.DateTimeField(null=True, blank=True)
@@ -29,6 +30,14 @@ class Orcamento(models.Model):
         "usuarios.Usuario",
         on_delete=models.PROTECT,
         related_name="orcamentos_emitidos",
+        null=True,
+        blank=True,
+    )
+    publicado_em = models.DateTimeField(null=True, blank=True)
+    publicado_por = models.ForeignKey(
+        "usuarios.Usuario",
+        on_delete=models.PROTECT,
+        related_name="orcamentos_publicados",
         null=True,
         blank=True,
     )

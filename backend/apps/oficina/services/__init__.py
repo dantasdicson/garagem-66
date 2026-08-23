@@ -15,6 +15,7 @@ from .orcamento import (
     adicionar_servico_previsto,
     decidir_orcamento,
     emitir_orcamento,
+    publicar_orcamento,
     remover_item_previsto,
 )
 
@@ -26,6 +27,7 @@ __all__ = [
     "iniciar_atendimento",
     "decidir_orcamento",
     "emitir_orcamento",
+    "publicar_orcamento",
     "remover_item_previsto",
     "registrar_entrada_veiculo",
     "registrar_item_servico",

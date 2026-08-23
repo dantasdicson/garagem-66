@@ -49,8 +49,14 @@ class AcessoClienteTests(TestCase):
             descricao_problema="Troca de óleo",
             status=OrdemServico.Status.AGUARDANDO_APROVACAO,
         )
-        self.orcamento = Orcamento.objects.create(ordem_servico=self.ordem)
-        self.outro_orcamento = Orcamento.objects.create(ordem_servico=self.outra_ordem)
+        self.orcamento = Orcamento.objects.create(
+            ordem_servico=self.ordem,
+            status=Orcamento.Status.AGUARDANDO_APROVACAO,
+        )
+        self.outro_orcamento = Orcamento.objects.create(
+            ordem_servico=self.outra_ordem,
+            status=Orcamento.Status.AGUARDANDO_APROVACAO,
+        )
         self.historico = HistoricoStatusOrdem.objects.create(
             ordem_servico=self.ordem,
             status_anterior=OrdemServico.Status.AGUARDANDO_ORCAMENTO,
@@ -90,6 +96,14 @@ class AcessoClienteTests(TestCase):
     def test_cliente_visualiza_somente_os_proprios_orcamentos(self):
         self.assertEqual(self._ids("orcamento-list"), {self.orcamento.id})
         resposta = self.api.get(reverse("orcamento-detail", args=(self.outro_orcamento.id,)))
+        self.assertEqual(resposta.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_cliente_nao_visualiza_orcamento_em_rascunho(self):
+        self.orcamento.status = Orcamento.Status.RASCUNHO
+        self.orcamento.save(update_fields=("status",))
+
+        self.assertEqual(self._ids("orcamento-list"), set())
+        resposta = self.api.get(reverse("orcamento-detail", args=(self.orcamento.id,)))
         self.assertEqual(resposta.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_cliente_visualiza_somente_o_historico_das_proprias_ordens(self):

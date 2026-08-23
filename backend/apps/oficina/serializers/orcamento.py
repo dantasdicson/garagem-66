@@ -21,12 +21,12 @@ class OrcamentoSerializer(serializers.ModelSerializer):
         fields = "__all__"
         read_only_fields = (
             "id", "status", "criado_em", "atualizado_em", "emitido_por",
-            "decidido_em", "decidido_por",
+            "decidido_em", "decidido_por", "publicado_em", "publicado_por",
         )
 
     def validate(self, attrs):
-        if self.instance and self.instance.status != Orcamento.Status.AGUARDANDO_APROVACAO:
-            raise serializers.ValidationError("Um orçamento já decidido não pode ser alterado.")
+        if self.instance and self.instance.status != Orcamento.Status.RASCUNHO:
+            raise serializers.ValidationError("Somente um orçamento em rascunho pode ser alterado.")
         if not self.instance:
             valor_mao_obra = attrs.get("valor_mao_obra", Decimal("0"))
             valor_pecas = attrs.get("valor_pecas", Decimal("0"))

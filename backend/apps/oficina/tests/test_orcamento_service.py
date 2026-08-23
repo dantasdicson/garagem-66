@@ -7,12 +7,18 @@ from django.utils import timezone
 
 from apps.estoque.models import Peca
 from apps.oficina.models import Cliente, HistoricoStatusOrdem, ItemOrcamentoPeca, ItemOrcamentoServico, ItemServico, Motocicleta, Orcamento, OrdemServico
-from apps.oficina.services import adicionar_peca_prevista, adicionar_servico_previsto, decidir_orcamento, emitir_orcamento, remover_item_previsto
+from apps.oficina.services import adicionar_peca_prevista, adicionar_servico_previsto, decidir_orcamento, emitir_orcamento, publicar_orcamento, remover_item_previsto
 from apps.usuarios.models import Usuario
 
 
 class OrcamentoServiceTests(TestCase):
     def setUp(self):
+        self.administrador = Usuario.objects.create_user(
+            username="administrador-orcamento",
+            email="administrador@garagem66.test",
+            password="teste-forte-123",
+            tipo=Usuario.Tipo.ADMINISTRADOR,
+        )
         self.atendente = Usuario.objects.create_user(
             username="atendente-orcamento",
             email="atendente@garagem66.test",
@@ -31,6 +37,18 @@ class OrcamentoServiceTests(TestCase):
             password="teste-forte-123",
             tipo=Usuario.Tipo.CLIENTE,
         )
+        self.mecanico = Usuario.objects.create_user(
+            username="mecanico-orcamento",
+            email="mecanico@garagem66.test",
+            password="teste-forte-123",
+            tipo=Usuario.Tipo.MECANICO,
+        )
+        self.outro_mecanico = Usuario.objects.create_user(
+            username="outro-mecanico-orcamento",
+            email="outro-mecanico@garagem66.test",
+            password="teste-forte-123",
+            tipo=Usuario.Tipo.MECANICO,
+        )
         cliente = Cliente.objects.create(nome="Cliente do orçamento", usuario=self.cliente_usuario)
         motocicleta = Motocicleta.objects.create(
             cliente=cliente,
@@ -43,29 +61,60 @@ class OrcamentoServiceTests(TestCase):
             numero="OS-ORC-001",
             motocicleta=motocicleta,
             cliente=cliente,
+            mecanico=self.mecanico,
             descricao_problema="Manutenção corretiva",
             status=OrdemServico.Status.AGUARDANDO_ORCAMENTO,
         )
 
-    def emitir(self):
+    def criar_rascunho(self, emitido_por=None):
         return emitir_orcamento(
             ordem_servico=self.ordem,
-            emitido_por=self.atendente,
+            emitido_por=emitido_por or self.atendente,
             valor_mao_obra=Decimal("300.00"),
             valor_pecas=Decimal("450.00"),
         )
 
+    def emitir(self):
+        return publicar_orcamento(
+            orcamento=self.criar_rascunho(),
+            administrador=self.administrador,
+        )
+
     def test_emitir_orcamento_atualiza_ordem(self):
-        orcamento = self.emitir()
+        orcamento = self.criar_rascunho()
 
         self.ordem.refresh_from_db()
-        self.assertEqual(orcamento.status, Orcamento.Status.AGUARDANDO_APROVACAO)
+        self.assertEqual(orcamento.status, Orcamento.Status.RASCUNHO)
         self.assertEqual(orcamento.emitido_por, self.atendente)
         self.assertEqual(orcamento.validade, timezone.localdate() + timedelta(days=7))
+        self.assertEqual(self.ordem.status, OrdemServico.Status.AGUARDANDO_ORCAMENTO)
+        self.assertFalse(HistoricoStatusOrdem.objects.exists())
+
+        orcamento = publicar_orcamento(orcamento=orcamento, administrador=self.administrador)
+        self.ordem.refresh_from_db()
+        self.assertEqual(orcamento.status, Orcamento.Status.AGUARDANDO_APROVACAO)
+        self.assertEqual(orcamento.publicado_por, self.administrador)
+        self.assertIsNotNone(orcamento.publicado_em)
         self.assertEqual(self.ordem.status, OrdemServico.Status.AGUARDANDO_APROVACAO)
         historico = HistoricoStatusOrdem.objects.get(ordem_servico=self.ordem)
-        self.assertEqual(historico.responsavel, self.atendente)
+        self.assertEqual(historico.responsavel, self.administrador)
         self.assertEqual(historico.novo_status, OrdemServico.Status.AGUARDANDO_APROVACAO)
+
+    def test_mecanico_atribuido_pode_preparar_rascunho(self):
+        orcamento = self.criar_rascunho(self.mecanico)
+        self.assertEqual(orcamento.emitido_por, self.mecanico)
+        self.assertEqual(orcamento.status, Orcamento.Status.RASCUNHO)
+
+    def test_mecanico_nao_atribuido_nao_pode_preparar_rascunho(self):
+        with self.assertRaisesMessage(ValidationError, "ordem atribuída a ele"):
+            self.criar_rascunho(self.outro_mecanico)
+
+    def test_somente_administrador_publica_rascunho(self):
+        rascunho = self.criar_rascunho(self.mecanico)
+        with self.assertRaisesMessage(ValidationError, "Somente o administrador"):
+            publicar_orcamento(orcamento=rascunho, administrador=self.atendente)
+        rascunho.refresh_from_db()
+        self.assertEqual(rascunho.status, Orcamento.Status.RASCUNHO)
 
     def test_nao_emite_orcamento_sem_valor(self):
         with self.assertRaisesMessage(ValidationError, "Informe um valor total maior que zero"):
@@ -135,7 +184,7 @@ class OrcamentoServiceTests(TestCase):
             )
 
     def test_itens_previstos_calculam_totais_sem_registrar_execucao(self):
-        orcamento = self.emitir()
+        orcamento = self.criar_rascunho()
         peca = Peca.objects.create(
             codigo="ORC-PEC-001",
             nome="Pastilha de freio",
@@ -184,7 +233,7 @@ class OrcamentoServiceTests(TestCase):
             )
 
     def test_remover_item_previsto_recalcula_total(self):
-        orcamento = self.emitir()
+        orcamento = self.criar_rascunho()
         primeiro = adicionar_servico_previsto(
             orcamento=orcamento,
             responsavel=self.atendente,
